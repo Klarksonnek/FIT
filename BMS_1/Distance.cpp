@@ -27,7 +27,7 @@ double Distance::largeCities(double f, double hB)
 	else if (f > 200 && f <= 1500)
 		return 3.2 * pow((log10(11.75 * hB)), 2) - 4.97;
 
-	throw CustomException("nespravna frekvencia");
+	throw CustomException("wrong frequency");
 }
 
 double Distance::countDistance(double Lu, double f, double hB, double CH)
