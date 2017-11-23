@@ -9,6 +9,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/BTSData.cpp
 	${PROJECT_SOURCE_DIR}/BTSLoadData.cpp
 	${PROJECT_SOURCE_DIR}/Coordinates.cpp
+	${PROJECT_SOURCE_DIR}/Distance.cpp
 	${PROJECT_SOURCE_DIR}/CustomException.cpp
 )
 
