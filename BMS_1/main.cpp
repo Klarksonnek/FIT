@@ -16,7 +16,7 @@ bool init(const string &m_BTSFile, map<BTSData::BTSKey, BTSData::Ptr> &m_BTSData
 	BTSLoadData data;
 
 	if (!data.open(m_BTSFile, ';')) {
-		cerr << "File " + m_BTSFile + " with list of BTS cannot be loaded." << endl;
+		cerr << "file " + m_BTSFile + " with list of BTS cannot be loaded" << endl;
 		return false;
 	}
 
@@ -47,7 +47,7 @@ bool initNearBTS(const string &m_nearBTSFIle, map<BTSData::BTSKey, BTSData::Ptr>
 	BTSLoadData data;
 
 	if (!data.open(m_nearBTSFIle, ';')) {
-		cerr << "File " + m_nearBTSFIle + " with list of BTS cannot be loaded." << endl;
+		cerr << "file " + m_nearBTSFIle + " with list of BTS cannot be loaded" << endl;
 		return false;
 	}
 
@@ -95,22 +95,36 @@ void countDistance(vector<BTSData::Ptr> &m_nearBTS, vector<Distance::BTSDistance
 	}
 }
 
-// TODO - opravit texty vo vynimkach
-// TODO - doplnit este nacitanie argumentov programu
-// TODO - zamysliet sa ako osetrit neplatny vstup v stoi a podobne pri parsovani vstupneho suboru
+void save(Coordinates::Ptr GPS)
+{
+	string outputFile = "out.txt";
+	ofstream output(outputFile);
+
+	if(output.is_open()) {
+		output << GPS->GoogleMapLink() << endl;
+		output.close();
+	}
+	else {
+		cerr << "GPS coordinates of mobile station was not save" << endl;
+	}
+}
+
 // TODO - otestovat ci vsetko funguje ako ma
-// TODO - pridat generovanie vystupneho suboru, kde bude odkaz
 // TODO - premenovat niektore premenne a niektore premenne v niektorych triedach
 // TODO - upravit Makefile pre testy
 
-int main()
+int main(int argc, char* argv[])
 {
+	if (argc != 2) {
+		cerr <<  "file containing information about BTS was not entered" << endl;
+	}
+
 	map<BTSData::BTSKey, BTSData::Ptr> m_BTSData;
 	vector<BTSData::Ptr> m_nearBTS;
 	vector<Distance::BTSDistance> m_distance;
 
 	try {
-		if (!init("./csv/03-bts.csv", m_BTSData) || !initNearBTS("./csv/in1.csv", m_BTSData, m_nearBTS))
+		if (!init("bts.csv", m_BTSData) || !initNearBTS(argv[1], m_BTSData, m_nearBTS))
 			return EXIT_FAILURE;
 
 		countDistance(m_nearBTS, m_distance);
@@ -118,14 +132,14 @@ int main()
 		Distance location;
 
 		Coordinates::Ptr GPS = location.findMS(m_distance);
-		cout << GPS->GoogleMapLink() << endl;
+		save(GPS);
 
 	}
 	catch (const CustomException &ex) {
 		cerr << ex.message() << endl;
 		return EXIT_FAILURE;
 	}
-	catch (const exception &ex) {
+	catch (...) {
 		cerr << "unknown error" << endl;
 		return EXIT_FAILURE;
 	}
