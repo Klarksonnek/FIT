@@ -48,7 +48,7 @@ vector<string> BTSLoadData::rawRow()
 					m_columnCount = row.size();
 
 				if (m_columnCount != row.size()) {
-					throw CustomException("nespravny pocet stlpcov");
+					throw CustomException("wrong number of columns in CSV");
 				}
 
 				return row;
