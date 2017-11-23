@@ -6,6 +6,7 @@ find_library (POCO_FOUNDATION PocoFoundation)
 add_definitions(-std=c++11 -Wall -pedantic -Wextra)
 
 file(GLOB SOURCES
+	${PROJECT_SOURCE_DIR}/BTSLoadData.cpp
 	${PROJECT_SOURCE_DIR}/CustomException.cpp
 )
 
