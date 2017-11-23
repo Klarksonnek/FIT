@@ -31,3 +31,30 @@ target_link_libraries(${PROJECT_NAME}
 	-Wl,--no-whole-archive
 	${LIBS}
 )
+
+add_executable("testGPS" ./mainTestGPS.cpp)
+
+target_link_libraries("testGPS"
+	-Wl,--whole-archive
+	ExampleCmake
+	-Wl,--no-whole-archive
+	${LIBS}
+)
+
+add_executable("testHataModel" ./mainTestHata.cpp)
+
+target_link_libraries("testHataModel"
+	-Wl,--whole-archive
+	ExampleCmake
+	-Wl,--no-whole-archive
+	${LIBS}
+)
+
+add_executable("testBTSData" ./mainTestBTSData.cpp)
+
+target_link_libraries("testBTSData"
+	-Wl,--whole-archive
+	ExampleCmake
+	-Wl,--no-whole-archive
+	${LIBS}
+)
