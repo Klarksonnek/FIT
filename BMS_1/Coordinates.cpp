@@ -39,7 +39,7 @@ void Coordinates::setDMSLongitude(double longitude)
 
 string Coordinates::GoogleMapLink() const
 {
-	return "https://www.google.com/maps/place/" + convertDDToDMSLatitude() + convertDDToDMSLongitude();
+	return "https://www.google.com/maps/place/" + convertDDToDMSLatitude() + "+" + convertDDToDMSLongitude();
 }
 
 Coordinates::Ptr Coordinates::DMSToDD(const string &coordinates)
@@ -47,7 +47,7 @@ Coordinates::Ptr Coordinates::DMSToDD(const string &coordinates)
 	StringTokenizer tokens(coordinates, ",");
 
 	if (tokens.count() != 2)
-		throw CustomException("nespravny pocet parametrov v suradniciach");
+		throw CustomException("wrong number of coordinates");
 
 	Coordinates::Ptr gps = new Coordinates;
 	gps->setDMSLatitude(convertDMSToDDLatitude(tokens[0]));
@@ -62,7 +62,7 @@ double Coordinates::convertDMSToDDLatitude(const string &data)
 	RegularExpression::MatchVec matchVector;
 
 	if (re.match(data, 0, matchVector) != 5)
-		throw CustomException("nejaky text");
+		throw CustomException("wrong format of DMS latitude");
 
 	double latitude = 0;
 	latitude += stof(data.substr(matchVector[1].offset, matchVector[1].length));
@@ -81,7 +81,7 @@ double Coordinates::convertDMSToDDLongitude(const string &data)
 	RegularExpression::MatchVec matchVector;
 
 	if (re.match(data, 0, matchVector) != 5)
-		throw CustomException("Nepalatne suradnice");
+		throw CustomException("wrong format of DMS longitude");
 
 	double longitude = 0;
 	longitude += stof(data.substr(matchVector[1].offset, matchVector[1].length));
@@ -97,7 +97,7 @@ double Coordinates::convertDMSToDDLongitude(const string &data)
 string Coordinates::convertDDToDMSLatitude() const
 {
 	if (isnan(m_latitude))
-		throw CustomException("Neplatna suradnica");
+		throw CustomException("wrong DD latitude");
 
 	double latitude = m_latitude;
 
@@ -107,14 +107,19 @@ string Coordinates::convertDDToDMSLatitude() const
 	int deg = latitude;
 	int min = (latitude - deg) * 60;
 	double sec = (latitude - deg - min/60.0) * 3600;
+	sec = roundf(sec * 100) / 100;
+	std::ostringstream pomStr;
+	pomStr << sec;
+	std::string secStr = pomStr.str();
+	secStr.substr(0, secStr.find('.') + 2);
 
-	return to_string(deg) + "°" + to_string(min) + "'" + to_string(sec) + "\"" + ((m_latitude < 0) ? "S" : "N");
+	return to_string(deg) + "°" + to_string(min) + "'" + secStr + "\"" + ((m_latitude < 0) ? "S" : "N");
 }
 
 string Coordinates::convertDDToDMSLongitude() const
 {
 	if (isnan(m_longitude))
-		throw CustomException("neplatna suradnica ");
+		throw CustomException("wrong DD longitude");
 
 	double longitude = m_longitude;
 
@@ -124,6 +129,11 @@ string Coordinates::convertDDToDMSLongitude() const
 	int deg = longitude;
 	int min = (longitude - deg) * 60;
 	double sec = (longitude - deg - min/60.0) * 3600;
+	sec = roundf(sec * 100) / 100;
+	std::ostringstream pomStr;
+	pomStr << sec;
+	std::string secStr = pomStr.str();
+	secStr.substr(0, secStr.find('.') + 2);
 
-	return to_string(deg) + "°" + to_string(min) + "'" + to_string(sec) + "\"" + ((m_longitude < 0) ? "W" : "E");
+	return to_string(deg) + "°" + to_string(min) + "'" + secStr + "\"" + ((m_longitude < 0) ? "W" : "E");
 }
