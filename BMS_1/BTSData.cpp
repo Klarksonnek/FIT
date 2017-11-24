@@ -1,5 +1,3 @@
-#include <string>
-
 #include "BTSData.h"
 
 using namespace std;
@@ -15,16 +13,16 @@ BTSData::BTSData(int CID):
  */
 void BTSData::setGPSCoordinate(Coordinates::Ptr GPS)
 {
-	m_GPSCoordinate = GPS;
+	m_GPS = GPS;
 }
 
 /**
  * Returns GPS coordinates.
- * @return    GPS coordinates.
+ * @return	GPS coordinates.
  */
 Coordinates::Ptr BTSData::GPSCoordinate() const
 {
-	return m_GPSCoordinate;
+	return m_GPS;
 }
 
 /**
@@ -38,7 +36,7 @@ void BTSData::setSignal(double signal)
 
 /**
  * Returns signal measured on mobile station.
- * @return    Signal measured on mobile station.
+ * @return	Signal measured on mobile station.
  */
 double BTSData::signal() const
 {
@@ -51,16 +49,16 @@ double BTSData::signal() const
  */
 void BTSData::setHeight(double height)
 {
-	m_BTSHeight = height;
+	m_height = height;
 }
 
 /**
  * Returns heigth of BTS antenna.
- * @return    Heigth of BTS antenna.
+ * @return	Heigth of BTS antenna.
  */
 double BTSData::height() const
 {
-	return m_BTSHeight;
+	return m_height;
 }
 
 /**
@@ -74,7 +72,7 @@ void BTSData::setPower(double power)
 
 /**
  * Return BTS power.
- * @return    Power.
+ * @return	Power.
  */
 double BTSData::power() const
 {
