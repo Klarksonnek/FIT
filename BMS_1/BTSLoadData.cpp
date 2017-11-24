@@ -9,9 +9,9 @@ BTSLoadData::BTSLoadData()
 
 /**
  * Opens input file and file containing list of BTS.
- * @param file    File name.
- * @param delimiter    Delimiter.
- * @return    True if file is open, false otherwise.
+ * @param 	file    	File name.
+ * @param 	delimiter	Delimiter.
+ * @return 	True if file is open, false otherwise.
  */
 bool BTSLoadData::open(const string &file, char delimiter)
 {
@@ -31,7 +31,7 @@ void BTSLoadData::close()
 
 /**
  * Tests end of file.
- * @return    True if it is EOF, false otherwise.
+ * @return	True if it is EOF, false otherwise.
  */
 bool BTSLoadData::isEOF() const
 {
@@ -40,7 +40,7 @@ bool BTSLoadData::isEOF() const
 
 /**
  * Parses one line of input file.
- * @return    Parsed line.
+ * @return	Parsed line.
  */
 vector<string> BTSLoadData::rawRow()
 {
@@ -52,21 +52,23 @@ vector<string> BTSLoadData::rawRow()
 
 	while (m_file.get(c)) {
 		if (c == '\r') {
+			// carriage return
 			continue;
 		}
 
-		if ('\n' == c) {
+		if (c == '\n') {
+			// line feed
 			if (quote) {
 				cell += c;
 			}
 			else {
+				// store cell into vector
 				row.push_back(cell);
 				if (m_columnCount == 0)
 					m_columnCount = row.size();
 
-				if (m_columnCount != row.size()) {
+				if (m_columnCount != row.size())
 					throw CustomException("wrong number of columns in CSV");
-				}
 
 				return row;
 			}
@@ -76,6 +78,7 @@ vector<string> BTSLoadData::rawRow()
 				cell += c;
 			}
 			else {
+				// store cell into vector
 				row.push_back(cell);
 				cell.clear();
 			}
