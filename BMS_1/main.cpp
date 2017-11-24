@@ -11,6 +11,12 @@ const double HEIGHT = 1.2;
 
 using namespace std;
 
+/**
+ * Initializes list of BTS stations.
+ * @param m_BTSFile    File name containing list of BTS.
+ * @param m_BTSData    Information about BTS.
+ * @return    True if initialization is successful, false otherwise.
+ */
 bool init(const string &m_BTSFile, map<BTSData::BTSKey, BTSData::Ptr> &m_BTSData)
 {
 	BTSLoadData data;
@@ -25,7 +31,6 @@ bool init(const string &m_BTSFile, map<BTSData::BTSKey, BTSData::Ptr> &m_BTSData
 	while (!data.isEOF()) {
 		vector<string> row = data.rawRow();
 
-		// TODO chybalo
 		if (row.empty())
 			continue;
 
@@ -42,6 +47,13 @@ bool init(const string &m_BTSFile, map<BTSData::BTSKey, BTSData::Ptr> &m_BTSData
 	return true;
 }
 
+/**
+ * Initializes BTS from input file.
+ * @param m_nearBTSFIle    File name containing list of near BTS.
+ * @param m_BTSData    Information about BTS.
+ * @param m_nearBTS    Information about near BTS.
+ * @return   True if initialization is successful, false otherwise.
+ */
 bool initNearBTS(const string &m_nearBTSFIle, map<BTSData::BTSKey, BTSData::Ptr> &m_BTSData, vector<BTSData::Ptr> &m_nearBTS)
 {
 	BTSLoadData data;
@@ -84,6 +96,11 @@ bool initNearBTS(const string &m_nearBTSFIle, map<BTSData::BTSKey, BTSData::Ptr>
 	return true;
 }
 
+/**
+ * Counts distance between base and mobile stations.
+ * @param m_nearBTS    Information about near BTS.
+ * @param m_distance    Distance between base and mobile stations.
+ */
 void countDistance(vector<BTSData::Ptr> &m_nearBTS, vector<Distance::BTSDistance> &m_distance)
 {
 	for (auto BTS : m_nearBTS) {
@@ -95,6 +112,10 @@ void countDistance(vector<BTSData::Ptr> &m_nearBTS, vector<Distance::BTSDistance
 	}
 }
 
+/**
+ * Creates and saves file containing link to Google Maps with reference * to the calculated coordinates.
+ * @param GPS
+ */
 void save(Coordinates::Ptr GPS)
 {
 	string outputFile = "out.txt";
@@ -113,6 +134,9 @@ void save(Coordinates::Ptr GPS)
 // TODO - premenovat niektore premenne a niektore premenne v niektorych triedach
 // TODO - upravit Makefile pre testy
 
+/**
+ * Main program.
+ */
 int main(int argc, char* argv[])
 {
 	if (argc != 2) {
@@ -127,11 +151,14 @@ int main(int argc, char* argv[])
 		if (!init("bts.csv", m_BTSData) || !initNearBTS(argv[1], m_BTSData, m_nearBTS))
 			return EXIT_FAILURE;
 
+		//TODO: check if input file is not empty
 		countDistance(m_nearBTS, m_distance);
 
 		Distance location;
 
 		Coordinates::Ptr GPS = location.findMS(m_distance);
+
+		// TODO: check if GPS coordinates are valid
 		save(GPS);
 
 	}
