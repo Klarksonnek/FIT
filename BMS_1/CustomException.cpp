@@ -7,6 +7,10 @@ CustomException::CustomException(const string &text):
 {
 }
 
+/**
+ * Returns exception message.
+ * @return	Exception message.
+ */
 std::string CustomException::message() const
 {
 	return m_message;

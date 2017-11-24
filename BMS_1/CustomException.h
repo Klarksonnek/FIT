@@ -3,6 +3,9 @@
 #include <exception>
 #include <string>
 
+/**
+ * Class for customizing the exception.
+ */
 class CustomException : public std::exception {
 public:
 	CustomException(const std::string &text);
