@@ -13,31 +13,34 @@ HEADERS= BTSLoadData.h \
 	Coordinates.h \
 	CustomException.h \
 	Distance.h \
-	main.h \
 	UTM.h \
 	Makefile
 
 SOURCES_TEST_BTSDATA= BTSLoadData.cpp \
 	 BTSData.cpp \
-	 Calculation.cpp \
+	 Coordinates.cpp \
+	 CustomException.cpp \
 	 Distance.cpp \
 	 mainTestBTSData.cpp
 
 SOURCES_TEST_GPS= BTSLoadData.cpp \
 	 BTSData.cpp \
-	 Calculation.cpp \
+	 Coordinates.cpp \
+	 CustomException.cpp \
 	 Distance.cpp \
 	 mainTestGPS.cpp
 
 SOURCES_TEST_HATA= BTSLoadData.cpp \
 	 BTSData.cpp \
-	 Calculation.cpp \
+	 Coordinates.cpp \
+	 CustomException.cpp \
 	 Distance.cpp \
 	 mainTestHata.cpp
 
 SOURCES_TEST_APP= BTSLoadData.cpp \
 	 BTSData.cpp \
-	 Calculation.cpp \
+	 Coordinates.cpp \
+	 CustomException.cpp \
 	 Distance.cpp \
 	 mainTestApp.cpp
 
