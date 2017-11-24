@@ -8,18 +8,39 @@
 using namespace std;
 using namespace Poco;
 
+/**
+ * Computes path loss in urban areas.
+ * @param f    Frequency of transmission.
+ * @param hB    Height of base station antenna.
+ * @param CH    Antenna height correction factor.
+ * @param d    Distance between the base and mobile stations.
+ * @return    Path loss in urban areas.
+ */
 double Distance::countLu(double f, double hB, double CH, double d)
 {
+	// convert meters to kilometers
 	d /= 1000;
 	return 69.55 + 26.16 * log10(f) - 13.82 * log10(hB) - CH
 		 + (44.9 - 6.55 * log10(hB)) * log10(d);
 }
 
+/**
+ * Computes antenna height correction factor for small or medium-sized city.
+ * @param f    Frequency of transmission.
+ * @param hB    Height of base station antenna.
+ * @return    Antenna height correction factor (small or medium-sized city).
+ */
 double Distance::smallOrMediumSizedCity(double f, double hB)
 {
 	return 0.8 + (1.1 * log10(f) - 0.7) * hB - 1.56 * log10(f);
 }
 
+/**
+ * Computes antenna height correction factor for large city.
+ * @param f    Frequency of transmission.
+ * @param hB    Height of base station antenna.
+ * @return    Antenna height correction factor (large city).
+ */
 double Distance::largeCities(double f, double hB)
 {
 	if (f >= 150 && f <= 200)
@@ -30,19 +51,39 @@ double Distance::largeCities(double f, double hB)
 	throw CustomException("wrong frequency");
 }
 
+/**
+ * Counts distance between base and mobile stations.
+ * @param Lu   Path loss in urban areas.
+ * @param f    Frequency of transmission.
+ * @param hB    Height of base station antenna.
+ * @param CH    Antenna height correction factor.
+ * @return    Distance between base and mobile stations.
+ */
 double Distance::countDistance(double Lu, double f, double hB, double CH)
 {
 	double numerator = Lu - 26.16 * log10(f) + 13.82 * log10(hB) + CH - 69.55;
 	double denominator = 44.9 - 6.55 * log10(hB);
 
+	// convert distance in kilometers to meters
 	return pow(10, numerator / denominator) * 1000;
 }
 
+/**
+ * Counts path loss.
+ * @param power    BTS power.
+ * @param signal    Signal measured on mobile station.
+ * @return    Path loss.
+ */
 double Distance::countPathLoss(double power, double signal)
 {
 	return 10 * log10(1000 * power) - signal;
 }
 
+/**
+ * Finds coordinates of mobile station.
+ * @param nearBTS    Distances to near BTS,
+ * @return    Coordinates of mobile station.
+ */
 Coordinates::Ptr Distance::findMS(
 	const vector<Distance::BTSDistance> &nearBTS)
 {
@@ -113,6 +154,12 @@ Coordinates::Ptr Distance::findMS(
 	return coordinates;
 }
 
+/**
+ * Counts position of mobile station.
+ * @param p1    Coordinates of point 1 in UTM.
+ * @param p2    Coordinates od point 2 in UTM.
+ * @return    Position of mobile station.
+ */
 vector<PointAndDistance> Distance::countMS(
 		PointAndDistance p1, PointAndDistance p2)
 {
