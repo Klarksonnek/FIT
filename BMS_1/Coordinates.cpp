@@ -17,31 +17,56 @@ Coordinates::Coordinates():
 {
 }
 
+/**
+ * Returns latitude expressed in Decimal Degrees (DD).
+ * @return    Latitude in DD.
+ */
 double Coordinates::DDLatitude() const
 {
 	return m_latitude;
 }
 
+/**
+ * Returns longitude expressed in DD.
+ * @return    Longitude in DD.
+ */
 double Coordinates::DDLongitude() const
 {
 	return m_longitude;
 }
 
+/**
+ * Sets latitude expressed in Degrees Minutes Seconds (DMS).
+ * @param latitude    Latitude in DMS.
+ */
 void Coordinates::setDMSLatitude(double latitude)
 {
 	m_latitude = latitude;
 }
 
+/**
+ * Sets longitude expressed in DMS.
+ * @param longitude    Longitude in DMS.
+ */
 void Coordinates::setDMSLongitude(double longitude)
 {
 	m_longitude = longitude;
 }
 
+/**
+ * Creates link to Google Maps (position of mobile station).
+ * @return    Link to Google Maps.
+ */
 string Coordinates::GoogleMapLink() const
 {
 	return "https://www.google.com/maps/place/" + convertDDToDMSLatitude() + "+" + convertDDToDMSLongitude();
 }
 
+/**
+ * Converts coordinates expressed in DMS to DD.
+ * @param coordinates    GPS coordinates.
+ * @return    Converted GPS coordinates.
+ */
 Coordinates::Ptr Coordinates::DMSToDD(const string &coordinates)
 {
 	StringTokenizer tokens(coordinates, ",");
@@ -56,6 +81,11 @@ Coordinates::Ptr Coordinates::DMSToDD(const string &coordinates)
 	return gps;
 }
 
+/**
+ * Converts latitude expressed in DMS to DD.
+ * @param data    Latitude.
+ * @return    Converted latitude.
+ */
 double Coordinates::convertDMSToDDLatitude(const string &data)
 {
 	const RegularExpression re("([0-9]+)[^0-9]*([0-9]+)[^0-9]*([0-9]+.[0-9]+)[^0-9]*([N,S])");
@@ -75,6 +105,11 @@ double Coordinates::convertDMSToDDLatitude(const string &data)
 	return latitude;
 }
 
+/**
+ * Converts longitude expressed in DMS to DD.
+ * @param data    Longitude.
+ * @return    Converted longitude.
+ */
 double Coordinates::convertDMSToDDLongitude(const string &data)
 {
 	const RegularExpression re("([0-9]+)[^0-9]*([0-9]+)'([0-9]+.[0-9]+)[^0-9]*([E,W])");
@@ -94,6 +129,10 @@ double Coordinates::convertDMSToDDLongitude(const string &data)
 	return longitude;
 }
 
+/**
+ * Converts latitude expressed in DD to DMS.
+ * @return    Converted latitude.
+ */
 string Coordinates::convertDDToDMSLatitude() const
 {
 	if (isnan(m_latitude))
@@ -116,6 +155,10 @@ string Coordinates::convertDDToDMSLatitude() const
 	return to_string(deg) + "°" + to_string(min) + "'" + secStr + "\"" + ((m_latitude < 0) ? "S" : "N");
 }
 
+/**
+ * Converts longitude expressed in DD to DMS.
+ * @return    Converted longitude.
+ */
 string Coordinates::convertDDToDMSLongitude() const
 {
 	if (isnan(m_longitude))
