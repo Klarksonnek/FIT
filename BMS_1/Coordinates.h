@@ -2,33 +2,36 @@
 
 #include <Poco/SharedPtr.h>
 
-#include <list>
 #include <string>
-#include <vector>
 
+/**
+ *  Class for converting GPS coordinates expressed in decimal degrees format
+ *  to degrees minutes seconds format and vice versa. It also creates
+ *  link to Google Maps.
+ */
 class Coordinates {
 public:
 	typedef Poco::SharedPtr<Coordinates> Ptr;
 
 	Coordinates();
 
-	void setDMSLatitude(double latitude);
-	void setDMSLongitude(double longitude);
+	void setDegMinSecLatitude(double latitude);
+	void setDegMinSecLongitude(double longitude);
 
-	double DDLatitude() const;
-	double DDLongitude() const;
+	double DecDegLatitude() const;
+	double DecDegLongitude() const;
 
 	std::string GoogleMapLink() const;
 
-	static Coordinates::Ptr DMSToDD(const std::string &coordinates);
+	static Coordinates::Ptr DegMinSecToDecDeg(const std::string &GPS);
 
-	std::string convertDDToDMSLatitude() const;
-	std::string convertDDToDMSLongitude() const;
+	std::string convertDecDegToDegMinSecLatitude() const;
+	std::string convertDecDegToDegMinSecLongitude() const;
 
 private:
 	double m_latitude;
 	double m_longitude;
 
-	static double convertDMSToDDLatitude(const std::string &data);
-	static double convertDMSToDDLongitude(const std::string &data);
+	static double convertDegMinSecToDecDegLatitude(const std::string &data);
+	static double convertDegMinSecToDecDegLongitude(const std::string &data);
 };
