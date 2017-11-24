@@ -1,6 +1,3 @@
-#include <cmath>
-#include <iostream>
-
 #include "CustomException.h"
 #include "Distance.h"
 #include "UTM.h"
@@ -10,13 +7,13 @@ using namespace Poco;
 
 /**
  * Computes path loss in urban areas.
- * @param f    Frequency of transmission.
- * @param hB    Height of base station antenna.
- * @param CH    Antenna height correction factor.
- * @param d    Distance between the base and mobile stations.
- * @return    Path loss in urban areas.
+ * @param 	f		Frequency of transmission.
+ * @param 	hB		Height of base station antenna.
+ * @param 	CH		Antenna height correction factor.
+ * @param 	d 		Distance between the base and mobile stations.
+ * @return 	Path loss in urban areas.
  */
-double Distance::countLu(double f, double hB, double CH, double d)
+double Distance::computeLu(double f, double hB, double CH, double d)
 {
 	// convert meters to kilometers
 	d /= 1000;
@@ -26,9 +23,9 @@ double Distance::countLu(double f, double hB, double CH, double d)
 
 /**
  * Computes antenna height correction factor for small or medium-sized city.
- * @param f    Frequency of transmission.
- * @param hB    Height of base station antenna.
- * @return    Antenna height correction factor (small or medium-sized city).
+ * @param 	f		Frequency of transmission.
+ * @param 	hB		Height of base station antenna.
+ * @return	Antenna height correction factor (small or medium-sized city).
  */
 double Distance::smallOrMediumSizedCity(double f, double hB)
 {
@@ -37,11 +34,11 @@ double Distance::smallOrMediumSizedCity(double f, double hB)
 
 /**
  * Computes antenna height correction factor for large city.
- * @param f    Frequency of transmission.
- * @param hB    Height of base station antenna.
- * @return    Antenna height correction factor (large city).
+ * @param 	f		Frequency of transmission.
+ * @param 	hB		Height of base station antenna.
+ * @return	Antenna height correction factor (large city).
  */
-double Distance::largeCities(double f, double hB)
+double Distance::largeCity(double f, double hB)
 {
 	if (f >= 150 && f <= 200)
 		return 8.29 * pow((log10(1.54 * hB)), 2) - 1.1;
@@ -52,14 +49,14 @@ double Distance::largeCities(double f, double hB)
 }
 
 /**
- * Counts distance between base and mobile stations.
- * @param Lu   Path loss in urban areas.
- * @param f    Frequency of transmission.
- * @param hB    Height of base station antenna.
- * @param CH    Antenna height correction factor.
- * @return    Distance between base and mobile stations.
+ * Computes distance between base and mobile stations.
+ * @param 	Lu		Path loss in urban areas.
+ * @param 	f		Frequency of transmission.
+ * @param 	hB 		Height of base station antenna.
+ * @param 	CH		Antenna height correction factor.
+ * @return 	Distance between base and mobile stations.
  */
-double Distance::countDistance(double Lu, double f, double hB, double CH)
+double Distance::computeDistance(double Lu, double f, double hB, double CH)
 {
 	double numerator = Lu - 26.16 * log10(f) + 13.82 * log10(hB) + CH - 69.55;
 	double denominator = 44.9 - 6.55 * log10(hB);
@@ -69,59 +66,62 @@ double Distance::countDistance(double Lu, double f, double hB, double CH)
 }
 
 /**
- * Counts path loss.
- * @param power    BTS power.
- * @param signal    Signal measured on mobile station.
- * @return    Path loss.
+ * Computes path loss.
+ * @param 	power		BTS power.
+ * @param 	signal		Signal measured on mobile station.
+ * @return 	Path loss.
  */
-double Distance::countPathLoss(double power, double signal)
+double Distance::computePathLoss(double power, double signal)
 {
 	return 10 * log10(1000 * power) - signal;
 }
 
 /**
  * Finds coordinates of mobile station.
- * @param nearBTS    Distances to near BTS,
- * @return    Coordinates of mobile station.
+ * @param 	nearBTSDist		Distances to near BTS.
+ * @return	Coordinates of mobile station.
  */
 Coordinates::Ptr Distance::findMS(
-	const vector<Distance::BTSDistance> &nearBTS)
+	const vector<Distance::BTSDistance> &nearBTSDist)
 {
 	vector<PointAndDistance> points;
 
-	for (size_t i = 1; i <= nearBTS.size(); i++) {
-		Coordinates::Ptr gps1 = nearBTS.at(i - 1).first->GPSCoordinate();
+	for (size_t i = 1; i <= nearBTSDist.size(); i++) {
+		Coordinates::Ptr GPS1 = nearBTSDist.at(i - 1).first->GPSCoordinate();
 
-	double UTMNorthing;
-	double UTMEasting;
+	double UTMNorth;
+	double UTMEast;
 
-	char UTMZone = UTM::UTMLetterDesignator(gps1->DDLatitude());
+	char UTMZone = UTM::UTMLetterDesignator(GPS1->DecDegLatitude());
 
-	UTM::LLtoUTM(gps1->DDLatitude(), gps1->DDLongitude(), UTMNorthing, UTMEasting, &UTMZone);
+	// convert latitude and longitude to UTM coordinates
+	UTM::LLtoUTM(GPS1->DecDegLatitude(), GPS1->DecDegLongitude(), UTMNorth, UTMEast, &UTMZone);
 
 	const PointAndDistance p1 = {
-		UTMEasting,
-		UTMNorthing,
-		nearBTS.at(i - 1).second
+		UTMEast,
+		UTMNorth,
+		nearBTSDist.at(i - 1).second
 	};
 
-	for (size_t j = 1; j < nearBTS.size(); j++) {
-		const Coordinates::Ptr gps2 = nearBTS.at(j).first->GPSCoordinate();
+	for (size_t j = 1; j < nearBTSDist.size(); j++) {
+		const Coordinates::Ptr GPS2 = nearBTSDist.at(j).first->GPSCoordinate();
 
-		double UTMNorthing2;
-		double UTMEasting2;
+		double UTMNorth2;
+		double UTMEast2;
 
-		char UTMZone2 = UTM::UTMLetterDesignator(gps2->DDLatitude());
+		char UTMZone2 = UTM::UTMLetterDesignator(GPS2->DecDegLatitude());
 
-		UTM::LLtoUTM(gps2->DDLatitude(), gps2->DDLongitude(), UTMNorthing2, UTMEasting2, &UTMZone2);
+		// convert latitude and longitude to UTM coordinates
+		UTM::LLtoUTM(GPS2->DecDegLatitude(), GPS2->DecDegLongitude(), UTMNorth2, UTMEast2, &UTMZone2);
 
 		const PointAndDistance p2 = {
-				UTMEasting2,
-				UTMNorthing2,
-				nearBTS.at(j).second
+				UTMEast2,
+				UTMNorth2,
+				nearBTSDist.at(j).second
 			};
 
-			for (const auto &it : countMS(p1, p2)) {
+			for (const auto &it : computeIntersection(p1, p2)) {
+				// compute intersections with other circles
 				if (std::isnan(it.x) || std::isnan(it.y))
 					continue;
 
@@ -130,6 +130,7 @@ Coordinates::Ptr Distance::findMS(
 		}
 	}
 
+	// compute average of circle intersections
 	double x = 0;
 	double y = 0;
 
@@ -141,26 +142,30 @@ Coordinates::Ptr Distance::findMS(
 	x = x / points.size();
 	y = y / points.size();
 
-	Coordinates::Ptr coordinates = new Coordinates;
+	Coordinates::Ptr GPS = new Coordinates;
 
 	double latitude;
 	double longitude;
 
+	// convert UTM coordinates to latiude and longitude
 	UTM::UTMtoLL(y, x, "33U", latitude, longitude);
 
-	coordinates->setDMSLatitude(latitude);
-	coordinates->setDMSLongitude(longitude);
+	if (isnan(latitude) || isnan(longitude))
+		throw CustomException("GPS coordinates of mobile station are not valid");
 
-	return coordinates;
+	GPS->setDegMinSecLatitude(latitude);
+	GPS->setDegMinSecLongitude(longitude);
+
+	return GPS;
 }
 
 /**
- * Counts position of mobile station.
- * @param p1    Coordinates of point 1 in UTM.
- * @param p2    Coordinates od point 2 in UTM.
- * @return    Position of mobile station.
+ * Computes point of intersection of two circles.
+ * @param 	p1		Coordinates of point 1 in UTM.
+ * @param 	p2		Coordinates of point 2 in UTM.
+ * @return	Point of intersection.
  */
-vector<PointAndDistance> Distance::countMS(
+vector<PointAndDistance> Distance::computeIntersection(
 		PointAndDistance p1, PointAndDistance p2)
 {
 	vector<PointAndDistance> points;
@@ -175,13 +180,13 @@ vector<PointAndDistance> Distance::countMS(
 
 	double d = sqrt(pow(ax - bx, 2) + pow(ay - by, 2));
 	double m = (pow(ar, 2) - pow(br, 2)) / (2 * d) + (d / 2);
-	double v = sqrt(abs(pow(ar, 2) - pow(m, 2)));
+	double h = sqrt(abs(pow(ar, 2) - pow(m, 2)));
 
 	double sx = ax + (m / d) * (bx - ax);
 	double sy = ay + (m / d) * (by - ay);
 
-	double cx = (v / d) * (ay - by);
-	double cy = (v / d) * (ax - bx);
+	double cx = (h / d) * (ay - by);
+	double cy = (h / d) * (ax - bx);
 
 	points.push_back({sx + cx, sy - cy, 0});
 	points.push_back({sx - cx, sy + cy, 0});
