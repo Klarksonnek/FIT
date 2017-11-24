@@ -7,6 +7,12 @@ BTSLoadData::BTSLoadData()
 {
 }
 
+/**
+ * Opens input file and file containing list of BTS.
+ * @param file    File name.
+ * @param delimiter    Delimiter.
+ * @return    True if file is open, false otherwise.
+ */
 bool BTSLoadData::open(const string &file, char delimiter)
 {
 	m_file.open(file.c_str());
@@ -15,16 +21,27 @@ bool BTSLoadData::open(const string &file, char delimiter)
 	return m_file.is_open();
 }
 
+/**
+ * Closes file.
+ */
 void BTSLoadData::close()
 {
 	m_file.close();
 }
 
+/**
+ * Tests end of file.
+ * @return    True if it is EOF, false otherwise.
+ */
 bool BTSLoadData::isEOF() const
 {
 	return m_file.eof();
 }
 
+/**
+ * Parses one line of input file.
+ * @return    Parsed line.
+ */
 vector<string> BTSLoadData::rawRow()
 {
 	vector<string> row;
