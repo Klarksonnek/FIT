@@ -26,7 +26,7 @@ bool init(const string &BTSFile, map<BTSData::BTSKey, BTSData::Ptr> &BTSInfo)
 		return false;
 	}
 
-    if (BTSFile.empty()) {
+    if (data.isEmpty()) {
         cerr << "no list of BTS in file" << endl;
         return false;
     }
@@ -101,7 +101,7 @@ bool initNearBTS(const string &nearBTSFile, map<BTSData::BTSKey, BTSData::Ptr> &
 		}
 
 		if (!found) {
-			cerr << "no BTS was found" << endl;
+			cerr << "BTS with CID " << CID << " was not found" << endl;
 			continue;
 		}
 	}
