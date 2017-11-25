@@ -20,9 +20,7 @@ class Distance {
 public:
 	typedef std::pair<Poco::SharedPtr<BTSData>, double> BTSDistance;
 
-	static double computeLu(double f, double hB, double CH, double d);
 	static double smallOrMediumSizedCity(double f, double hB);
-	static double largeCity(double f, double hB);
 	static double computePathLoss(double power, double signal);
 
 	static double computeDistance(double Lu, double f, double hB, double CH);

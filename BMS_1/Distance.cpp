@@ -6,22 +6,6 @@ using namespace std;
 using namespace Poco;
 
 /**
- * Computes path loss in urban areas.
- * @param 	f		Frequency of transmission.
- * @param 	hB		Height of base station antenna.
- * @param 	CH		Antenna height correction factor.
- * @param 	d 		Distance between the base and mobile stations.
- * @return 	Path loss in urban areas.
- */
-double Distance::computeLu(double f, double hB, double CH, double d)
-{
-	// convert meters to kilometers
-	d /= 1000;
-	return 69.55 + 26.16 * log10(f) - 13.82 * log10(hB) - CH
-		 + (44.9 - 6.55 * log10(hB)) * log10(d);
-}
-
-/**
  * Computes antenna height correction factor for small or medium-sized city.
  * @param 	f		Frequency of transmission.
  * @param 	hB		Height of base station antenna.
@@ -30,22 +14,6 @@ double Distance::computeLu(double f, double hB, double CH, double d)
 double Distance::smallOrMediumSizedCity(double f, double hB)
 {
 	return 0.8 + (1.1 * log10(f) - 0.7) * hB - 1.56 * log10(f);
-}
-
-/**
- * Computes antenna height correction factor for large city.
- * @param 	f		Frequency of transmission.
- * @param 	hB		Height of base station antenna.
- * @return	Antenna height correction factor (large city).
- */
-double Distance::largeCity(double f, double hB)
-{
-	if (f >= 150 && f <= 200)
-		return 8.29 * pow((log10(1.54 * hB)), 2) - 1.1;
-	else if (f > 200 && f <= 1500)
-		return 3.2 * pow((log10(11.75 * hB)), 2) - 4.97;
-
-	throw CustomException("wrong frequency");
 }
 
 /**
