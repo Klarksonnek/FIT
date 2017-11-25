@@ -70,7 +70,7 @@ bool initNearBTS(const string &nearBTSFile, map<BTSData::BTSKey, BTSData::Ptr> &
 		return false;
 	}
 
-    if (data.isEOF()) {
+    if (data.isEmpty()) {
         cerr << "no information about near BTS in input file" << endl;
         return false;
     }
