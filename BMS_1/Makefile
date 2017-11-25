@@ -45,7 +45,7 @@ SOURCES_TEST_APP= BTSLoadData.cpp \
 	 mainTestApp.cpp
 
 all:
-	$(CC) $(FLAGS) $(SOURCES) -o p1 -L/usr/local/lib -L/usr/local/lib64 -lPocoFoundation -lPocoUtil
+	$(CC) $(FLAGS) $(SOURCES) -o p1 -L/usr/local/lib64 -lPocoFoundation -lPocoUtil
 
 clean:
 	/bin/rm -rf p1 $(LOGIN).zip
