@@ -14,6 +14,7 @@ public:
 	bool open(const std::string &file, char delimiter);
 	void close();
 	bool isEOF() const;
+	bool isEmpty();
 
 	std::vector<std::string> rawRow();
 

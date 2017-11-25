@@ -38,6 +38,11 @@ bool BTSLoadData::isEOF() const
 	return m_file.eof();
 }
 
+bool BTSLoadData::isEmpty()
+{
+	return m_file.peek() == ifstream::traits_type::eof();
+}
+
 /**
  * Parses one line of input file.
  * @return	Parsed line.
