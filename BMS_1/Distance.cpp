@@ -122,7 +122,7 @@ Coordinates::Ptr Distance::findMS(
 
 			for (const auto &it : computeIntersection(p1, p2)) {
 				// compute intersections with other circles
-				if (std::isnan(it.x) || std::isnan(it.y))
+				if (isnan(it.x) || isnan(it.y))
 					continue;
 
 				points.push_back(it);
