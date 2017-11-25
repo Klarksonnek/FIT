@@ -135,7 +135,7 @@ void save(Coordinates::Ptr GPS)
 	ofstream output(outputFile);
 
 	if(output.is_open()) {
-		output << GPS->GoogleMapLink() << endl;
+		output << GPS->GoogleMapLink() << "\n" << endl;
 		output.close();
 	}
 	else {
