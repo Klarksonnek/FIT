@@ -1,6 +1,7 @@
 #include <Poco/RegularExpression.h>
 #include <Poco/StringTokenizer.h>
 
+#include <cmath>
 #include <sstream>
 
 #include "Coordinates.h"
