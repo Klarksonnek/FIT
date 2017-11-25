@@ -1,3 +1,5 @@
+/* Retrieved from: https://github.com/bakercp/ofxGeo/blob/master/libs/UTM/include/UTM/UTM.h */
+
 /* -*- mode: C++ -*-
  *
  *  Conversions between Latitude/Longitude and UTM
