@@ -148,9 +148,9 @@ string Coordinates::convertDecDegToDegMinSecLatitude() const
 	double sec = (latitude - deg - min/60.0) * 3600;
 	// round seconds to two decimal places
 	sec = roundf(sec * 100) / 100;
-	std::ostringstream strTmp;
+	ostringstream strTmp;
 	strTmp << sec;
-	std::string secStr = strTmp.str();
+	string secStr = strTmp.str();
 	secStr.substr(0, secStr.find('.') + 2);
 
 	return to_string(deg) + "°" + to_string(min) + "'" + secStr + "\"" + ((m_latitude < 0) ? "S" : "N");
@@ -175,9 +175,9 @@ string Coordinates::convertDecDegToDegMinSecLongitude() const
 	double sec = (longitude - deg - min/60.0) * 3600;
 	// round seconds to two decimal places
 	sec = roundf(sec * 100) / 100;
-	std::ostringstream strTmp;
+	ostringstream strTmp;
 	strTmp << sec;
-	std::string secStr = strTmp.str();
+	string secStr = strTmp.str();
 	secStr.substr(0, secStr.find('.') + 2);
 
 	return to_string(deg) + "°" + to_string(min) + "'" + secStr + "\"" + ((m_longitude < 0) ? "W" : "E");
