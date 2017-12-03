@@ -7,7 +7,7 @@
 #include "CustomException.h"
 #include "sndfile.hh"
 
-#define SAMPLE_RATE 1800
+#define SAMPLE_RATE 18000
 #define AMPLITUDE (1.0 * 0x7F000000)
 #define FREQ (1000.0 / SAMPLE_RATE)
 #define PHASE_SHIFT_14 M_PI/4
@@ -28,7 +28,11 @@ void Common::modulation(const string &inputFile, const string &outputFile)
 	char c1;
 	char c2;
 	int *buffer = new int[SAMPLE_RATE];
-	unsigned  int i;
+	unsigned int i = 0;
+	const string SYNC_SEQUENCE = "00110011";
+
+	for (char c : SYNC_SEQUENCE)
+		inputBitSequence.push_back(c);
 
 	file.open(inputFile.c_str());
 
@@ -49,7 +53,7 @@ void Common::modulation(const string &inputFile, const string &outputFile)
 
 	file.close();
 
-	for (i = 0; !inputBitSequence.empty(); i++) {
+	while (!inputBitSequence.empty()) {
 		if (i >= SAMPLE_RATE)
 			throw CustomException("too many samples on input bit sequence of modulator");
 
