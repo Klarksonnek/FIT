@@ -1,8 +1,10 @@
 cmake_minimum_required(VERSION 2.8.11)
 project(bms2 CXX)
+add_definitions(-std=c++11 -Wall -pedantic -Wextra)
 
 file(GLOB SOURCES
-	${PROJECT_SOURCE_DIR}/sndfile.cpp
+	${PROJECT_SOURCE_DIR}/Common.cpp
+	${PROJECT_SOURCE_DIR}/CustomException.cpp
 )
 
 include_directories(

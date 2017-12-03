@@ -5,7 +5,7 @@
 #include <cstdlib>
 #include <math.h>
 
-#include "sndfile.cpp"
+#include "sndfile.hh"
 
 
 using namespace std;

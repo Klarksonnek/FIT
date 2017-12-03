@@ -5,7 +5,7 @@ LIBS=-lm
 all: bms2A bms2B
 
 
-bms2A: bms2A.cpp
+bms2A: bms2A.cpp Common.cpp CustomException.cpp
 	$(CC) $(CFLAGS) $(LIBS) $^ -o $@ libsndfile.a
 
 bms2B: bms2B.cpp
