@@ -1,17 +1,13 @@
-#include <cstdlib>
 #include <iostream>
 
-#include "Modulator.h"
 #include "CustomException.h"
-
-#define SAMPLE_RATE 18000
-#define CHANELS 1
-#define FORMAT (SF_FORMAT_WAV | SF_FORMAT_PCM_24)
-#define AMPLITUDE (1.0 * 0x7F000000)
-#define FREQ (1000.0 / SAMPLE_RATE)
+#include "Modulator.h"
 
 using namespace std;
 
+/**
+ * Main program.
+ */
 int main(int argc, char** argv)
 {
 	if (argc != 2) {
