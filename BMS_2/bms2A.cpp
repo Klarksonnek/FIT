@@ -1,12 +1,7 @@
-/* 
- * File:   bms1A.cpp
- */
-
 #include <cstdlib>
-#include <math.h>
 #include <iostream>
 
-#include "Common.h"
+#include "Modulator.h"
 #include "CustomException.h"
 
 #define SAMPLE_RATE 18000
@@ -20,13 +15,14 @@ using namespace std;
 int main(int argc, char** argv)
 {
 	if (argc != 2) {
-		cerr <<  "file containing bit sequence of modulator was not entered" << endl;
+		cerr <<  "input text file was not entered" << endl;
 		return EXIT_FAILURE;
 	}
 
 	try {
-		Common modulatorAndDemodulator;
-		modulatorAndDemodulator.modulation(argv[1], string(argv[1]) + ".waw");
+		Modulator modulator;
+		modulator.setInputTextFile(argv[1]);
+		modulator.modulation();
 	}
 	catch (const CustomException &ex) {
 		cerr << ex.message() << endl;
