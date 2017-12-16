@@ -3,8 +3,9 @@ project(bms2 CXX)
 add_definitions(-std=c++11 -Wall -pedantic -Wextra)
 
 file(GLOB SOURCES
-	${PROJECT_SOURCE_DIR}/Modulator.cpp
 	${PROJECT_SOURCE_DIR}/CustomException.cpp
+	${PROJECT_SOURCE_DIR}/Demodulator.cpp
+	${PROJECT_SOURCE_DIR}/Modulator.cpp
 )
 
 include_directories(
@@ -19,7 +20,7 @@ add_executable("bms2A" ${PROJECT_SOURCE_DIR}/bms2A.cpp)
 target_link_libraries("bms2A"
 	-Wl,--whole-archive
 	BMS2Lib
-		${PROJECT_SOURCE_DIR}/libsndfile.a
+	${PROJECT_SOURCE_DIR}/libsndfile.a
 	-Wl,--no-whole-archive
 )
 
