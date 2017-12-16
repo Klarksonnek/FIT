@@ -3,7 +3,7 @@ project(bms2 CXX)
 add_definitions(-std=c++11 -Wall -pedantic -Wextra)
 
 file(GLOB SOURCES
-	${PROJECT_SOURCE_DIR}/Common.cpp
+	${PROJECT_SOURCE_DIR}/Modulator.cpp
 	${PROJECT_SOURCE_DIR}/CustomException.cpp
 )
 
