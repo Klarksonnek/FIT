@@ -3,6 +3,10 @@
 #include <list>
 #include <string>
 
+/**
+ * Class containing information and methods needed
+ * for modulation.
+ */
 class Modulator {
 public:
 	Modulator();

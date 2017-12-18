@@ -9,7 +9,7 @@
 #define AMPLITUDE (1.0 * 0x7F000000)
 #define FREQ (1000.0 / SAMPLE_RATE)
 
-#define SAMPLES 15
+#define SAMPLES 30
 #define CHANELS 1
 #define FORMAT (SF_FORMAT_WAV | SF_FORMAT_PCM_24)
 
@@ -84,12 +84,14 @@ string Modulator::setOutputWavFile()
 	string outputFile;
 
 	// replace .txt suffix with .wav suffix
+	// last position where '.' is present
 	size_t position = m_inputFile.find_last_of(".");
 	if (position == string::npos)
 		throw CustomException("input text file does not contain '.txt' suffix");
 	if ((position != m_inputFile.size() - 4)
 		|| (m_inputFile.substr(position + 1, m_inputFile.size() - 1) != "txt"))
-		throw CustomException("input text file contain invalid suffix");
+		throw CustomException("input text file contains invalid suffix");
+
 	outputFile = m_inputFile.substr(0, position) + ".wav";
 
 	return outputFile;
@@ -98,7 +100,7 @@ string Modulator::setOutputWavFile()
 /**
  * Modulates input data.
  * @param  inputBits     Input bits loaded from the input file.
- * @return  Returns number of bit pairs.
+ * @return  Number of bit pairs.
  */
 unsigned int Modulator::modulate(list<char> &inputBits)
 {
@@ -116,7 +118,8 @@ unsigned int Modulator::modulate(list<char> &inputBits)
 		c2 = inputBits.front();
 		inputBits.pop_front();
 
-		for (int j = 0; j < SAMPLES; j++) {
+		// modulate
+		for (unsigned int j = 0; j < SAMPLES; j++) {
 			if (i >= SAMPLE_RATE)
 				throw CustomException("too many bits in input file");
 
@@ -141,7 +144,7 @@ unsigned int Modulator::modulate(list<char> &inputBits)
 
 /**
  * Inserts synchronization sequence to the list of bits.
- * @param inputBits     List of bits.
+ * @param  inputBits     List of bits.
  */
 void Modulator::insertSyncSeq(list<char> &inputBits)
 {
@@ -160,9 +163,8 @@ void Modulator::loadBits(std::ifstream &file, list<char> &inputBits)
 
 	while(file.get(c)) {
 		// store 0 or 1, ignore \n or \r
-		if (c == '0' || c == '1') {
+		if (c == '0' || c == '1')
 			inputBits.push_back(c);
-		}
 
 		else if (c != '\n' && c != '\r')
 			throw CustomException("invalid character in input text file");
