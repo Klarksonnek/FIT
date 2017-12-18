@@ -5,6 +5,10 @@
 
 #include "sndfile.hh"
 
+/**
+ * Class containing information and methods needed
+ * for demodulation.
+ */
 class Demodulator {
 public:
 	Demodulator();
