@@ -154,8 +154,7 @@ bool Demodulator::checkSyncSeq(unsigned int *numberOfSamples)
 	if ((m_samples.size() % *numberOfSamples) != 0)
 		throw CustomException("different number of samples for a phase shift");
 
-	// i iterates over the samples
-	// j iterates over the pair of bits
+	// i goes through samples and j goes through pair of bits
 	for (unsigned int j = 0; j < SYNC_SEQUENCE_LENGTH; j += 2) {
 		string refPhase = SYNC_SEQUENCE.substr(j, 2);
 		string phase = determinePhase(*numberOfSamples, i * *numberOfSamples);
@@ -206,8 +205,7 @@ unsigned int Demodulator::determineNumberOfSamples()
 		// return number of samples
 		if (abs(refSample - sample) > m_eps)
 			break;
-		else
-			i++;
+		i++;
 	}
 
 	return i;
