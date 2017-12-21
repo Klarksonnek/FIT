@@ -9,7 +9,7 @@
 #define AMPLITUDE (1.0 * 0x7F000000)
 #define FREQ (1000.0 / SAMPLE_RATE)
 
-#define SAMPLES 30
+#define SAMPLES 15
 #define CHANELS 1
 #define FORMAT (SF_FORMAT_WAV | SF_FORMAT_PCM_24)
 
@@ -18,13 +18,14 @@
 #define PHASE_SHIFT_54 5 * M_PI/4
 #define PHASE_SHIFT_74 7 * M_PI/4
 
+#define SYNC_SEQUENCE_LENGTH 8
+
 using namespace std;
 
 const string SYNC_SEQUENCE = "00110011";
 
 Modulator::Modulator():
-	m_buffer(new int[SAMPLE_RATE]),
-	m_length(0)
+	m_buffer(new int[SAMPLE_RATE])
 {
 }
 
@@ -42,17 +43,17 @@ void Modulator::modulation()
 	list<char> inputBits;
 	unsigned int length = 0;
 	string outputFile;
-
 	// open the input file
 	file.open(m_inputFile.c_str());
 	if (!file.is_open())
 		throw CustomException("input text file cannot be opened");
 
 	// set the output wav file
-	setOutputWavFile();
+	outputFile = setOutputWavFile();
 
 	// insert synchronization sequence at the beginning of list of bits
-	insertSyncSeq(inputBits);
+	for (unsigned int i = 0; i < SYNC_SEQUENCE_LENGTH; i++)
+		inputBits.push_back(SYNC_SEQUENCE[i]);
 
 	// load all bits from the input file
 	loadBits(file, inputBits);
@@ -123,33 +124,31 @@ unsigned int Modulator::modulate(list<char> &inputBits)
 			if (i >= SAMPLE_RATE)
 				throw CustomException("too many bits in input file");
 
-			// 01 = phase shift M_PI/4
-			if (c1 == '0' && c2 == '1')
-				m_buffer[i] = int(AMPLITUDE * sin(FREQ * 2 * M_PI * i + PHASE_SHIFT_14));
-			// 00 = phase shift 3 * M_PI/4
-			if (c1 == '0' && c2 == '0')
-				m_buffer[i] = int(AMPLITUDE * sin(FREQ * 2 * M_PI * i + PHASE_SHIFT_34));
-			// 10 = phase shift 5 * M_PI/4
-			if (c1 == '1' && c2 == '0')
-				m_buffer[i] = int(AMPLITUDE * sin(FREQ * 2 * M_PI * i + PHASE_SHIFT_54));
-			// 11 = phase shift 7 * M_PI/4
-			if (c1 == '1' && c2 == '1')
-				m_buffer[i] = int(AMPLITUDE * sin(FREQ * 2 * M_PI * i + PHASE_SHIFT_74));
+			if (c1 == '0') {
+				// 01 = phase shift M_PI/4
+				if (c2 == '1') {
+					m_buffer[i] = int(AMPLITUDE * sin(FREQ * 2 * M_PI * i + PHASE_SHIFT_14));
+				}
+				// 00 = phase shift 3 * M_PI/4
+				else if (c2 == '0') {
+					m_buffer[i] = int(AMPLITUDE * sin(FREQ * 2 * M_PI * i + PHASE_SHIFT_34));
+				}
+			}
 
+			if (c1 == '1') {
+				// 10 = phase shift 5 * M_PI/4
+				if (c2 == '0') {
+					m_buffer[i] = int(AMPLITUDE * sin(FREQ * 2 * M_PI * i + PHASE_SHIFT_54));
+				}
+				// 11 = phase shift 7 * M_PI/4
+				if (c2 == '1') {
+					m_buffer[i] = int(AMPLITUDE * sin(FREQ * 2 * M_PI * i + PHASE_SHIFT_74));
+				}
+			}
 			i++;
 		}
 	}
 	return i;
-}
-
-/**
- * Inserts synchronization sequence to the list of bits.
- * @param  inputBits     List of bits.
- */
-void Modulator::insertSyncSeq(list<char> &inputBits)
-{
-	for (char c : SYNC_SEQUENCE)
-		inputBits.push_back(c);
 }
 
 /**
@@ -166,7 +165,7 @@ void Modulator::loadBits(std::ifstream &file, list<char> &inputBits)
 		if (c == '0' || c == '1')
 			inputBits.push_back(c);
 
-		else if (c != '\n' && c != '\r')
+		else if (c != '\r' && c != '\n')
 			throw CustomException("invalid character in input text file");
 	}
 
@@ -175,4 +174,3 @@ void Modulator::loadBits(std::ifstream &file, list<char> &inputBits)
 
 	file.close();
 }
-
