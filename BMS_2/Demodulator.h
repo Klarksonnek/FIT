@@ -17,15 +17,14 @@ public:
 	void setInputWavFile(const std::string &file);
 
 private:
-	std::string setOutputTxtFile();
+	std::string makeTxtFile();
 	void setEps();
 	void loadSamples(SndfileHandle &input);
-	bool checkSyncSeq(unsigned int *numberOfSamples);
-	unsigned int determineNumberOfSamples();
-	void shiftPhase();
+	bool checkSyncSeq(unsigned int *numOfSamples);
+	unsigned int determineNumOfSample();
 	std::string determinePhase(unsigned int count, unsigned int startPosition);
 	std::string obtainPhase(unsigned int position);
-	void demodulate(unsigned int numberOfSamples);
+	void demodulate(unsigned int numOfSamples);
 
 	std::string m_inputFile;
 	int m_format;

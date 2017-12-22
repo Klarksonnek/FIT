@@ -7,7 +7,6 @@
 #define SAMPLE_RATE 18000
 #define AMPLITUDE (1.0 * 0x7F000000)
 #define FREQ (1000.0 / SAMPLE_RATE)
-#define SAMPLES 15
 #define CHANELS 1
 #define FORMAT (SF_FORMAT_WAV | SF_FORMAT_PCM_24)
 
@@ -23,7 +22,6 @@ using namespace std;
 
 // phase shift: 3 * M_PI/4, M_PI/4, 5 * M_PI/4, 7 * M_PI/4
 double phase[PHASE_SHIFT_CNT] = {PHASE_SHIFT_34, PHASE_SHIFT_14, PHASE_SHIFT_54, PHASE_SHIFT_74};
-const string SYNC_SEQUENCE = "00110011";
 
 Demodulator::Demodulator():
 	m_format(0),
@@ -37,7 +35,7 @@ Demodulator::Demodulator():
 void Demodulator::demodulation()
 {
 	SndfileHandle input;
-	unsigned int numberOfSamples = 0;
+	unsigned int numOfSamples = 0;
 	string outputFile;
 
 	// open the input wav file
@@ -52,17 +50,17 @@ void Demodulator::demodulation()
 	setEps();
 
 	// set the output txt file
-	outputFile = setOutputTxtFile();
+	outputFile = makeTxtFile();
 
 	// load all samples from the input file
 	loadSamples(input);
 
 	// check synchronization sequence
-	if (!checkSyncSeq(&numberOfSamples))
+	if (!checkSyncSeq(&numOfSamples))
 		throw CustomException("invalid sync sequence");
 
 	// demodulate the input
-	demodulate(numberOfSamples);
+	demodulate(numOfSamples);
 
 	// create and open the output file
 	ofstream output(outputFile);
@@ -94,7 +92,7 @@ void Demodulator::setInputWavFile(const string &file)
  * Creates the output filename (txt).
  * @return  Output filename.
  */
-string Demodulator::setOutputTxtFile()
+string Demodulator::makeTxtFile()
 {
 	string outputFile;
 
@@ -142,22 +140,23 @@ void Demodulator::loadSamples(SndfileHandle &input)
 
 /**
  * Checks the synchronization sequence.
- * @param  numberOfSamples     Number of samples.
+ * @param  numOfSamples     Number of samples.
  * @return  True if sequence is valid, false otherwise.
  */
-bool Demodulator::checkSyncSeq(unsigned int *numberOfSamples)
+bool Demodulator::checkSyncSeq(unsigned int *numOfSamples)
 {
 	unsigned int i = 0;
+	const string SYNC_SEQUENCE = "00110011";
 
-	*numberOfSamples = determineNumberOfSamples();
+	*numOfSamples = determineNumOfSample();
 
-	if ((m_samples.size() % *numberOfSamples) != 0)
+	if ((m_samples.size() % *numOfSamples) != 0)
 		throw CustomException("different number of samples for a phase shift");
 
 	// i goes through samples and j goes through pair of bits
 	for (unsigned int j = 0; j < SYNC_SEQUENCE_LENGTH; j += 2) {
 		string refPhase = SYNC_SEQUENCE.substr(j, 2);
-		string phase = determinePhase(*numberOfSamples, i * *numberOfSamples);
+		string phase = determinePhase(*numOfSamples, i * *numOfSamples);
 
 		// if phases are not equal, synchronization sequence is invalid
 		if(phase != refPhase)
@@ -173,24 +172,25 @@ bool Demodulator::checkSyncSeq(unsigned int *numberOfSamples)
  * Determines phase shift and number of samples for the phase shift.
  * @return  Number of samples.
  */
-unsigned int Demodulator::determineNumberOfSamples()
+unsigned int Demodulator::determineNumOfSample()
 {
 	unsigned int i = 0;
-	int refSample;
+	int referenceSample;
 	int sample;
 
-	refSample = int(AMPLITUDE * sin(FREQ * 2 * M_PI * i + phase[0]));
+	referenceSample = int(AMPLITUDE * sin(FREQ * 2 * M_PI * i + phase[0]));
 	sample = m_samples.at(i);
 
 	// if the absolute error between samples is greater than given precision,
 	// shift the sin phase
-	if (abs(refSample - sample) > m_eps) {
-		shiftPhase();
+	if (abs(referenceSample - sample) > m_eps) {
+		for (unsigned int i = 0; i < PHASE_SHIFT_CNT; i++)
+			phase[i] = 2 * M_PI - phase[i];
 
-		refSample = int(AMPLITUDE * sin(FREQ * 2 * M_PI * i + phase[0]));
+		referenceSample = int(AMPLITUDE * sin(FREQ * 2 * M_PI * i + phase[0]));
 		// if the absolute error between samples is greater than given precision again,
 		// the sequence is invalid
-		if (abs(refSample - sample) > m_eps)
+		if (abs(referenceSample - sample) > m_eps)
 			throw CustomException("invalid sync sequence");
 	}
 
@@ -198,26 +198,17 @@ unsigned int Demodulator::determineNumberOfSamples()
 
 	// determine the number of samples for phase shift
 	while (i < m_samples.size()) {
-		refSample = int(AMPLITUDE * sin(FREQ * 2 * M_PI * i + phase[0]));
+		referenceSample = int(AMPLITUDE * sin(FREQ * 2 * M_PI * i + phase[0]));
 		sample = m_samples.at(i);
 
 		// if the absolute error between samples is greater than given precision,
 		// return number of samples
-		if (abs(refSample - sample) > m_eps)
+		if (abs(referenceSample - sample) > m_eps)
 			break;
 		i++;
 	}
 
 	return i;
-}
-
-/**
- * Shifts the phase.
- */
-void Demodulator::shiftPhase()
-{
-	for (unsigned int i = 0; i < PHASE_SHIFT_CNT; i++)
-		phase[i] = 2 * M_PI - phase[i];
 }
 
 /**
@@ -228,7 +219,7 @@ void Demodulator::shiftPhase()
  */
 string Demodulator::determinePhase(unsigned int count, unsigned int startPosition)
 {
-	int refSample = 0;
+	int referenceSample = 0;
 	int sample = 0;
 	unsigned int defaultPosition = startPosition;
 
@@ -236,12 +227,12 @@ string Demodulator::determinePhase(unsigned int count, unsigned int startPositio
 		startPosition = defaultPosition;
 
 		for (unsigned int j = 0; j < count; j++) {
-			refSample = int(AMPLITUDE * sin(FREQ * 2 * M_PI * startPosition + phase[i]));
+			referenceSample = int(AMPLITUDE * sin(FREQ * 2 * M_PI * startPosition + phase[i]));
 			sample = m_samples.at(startPosition);
 
 			// if the absolute error between samples is greater than given precision,
 			// try next phase shift
-			if (abs(refSample - sample) > m_eps)
+			if (abs(referenceSample - sample) > m_eps)
 				break;
 
 			// if all samples are equal, obtain phase
@@ -274,18 +265,18 @@ string Demodulator::obtainPhase(unsigned int position)
 
 /**
  * Demodulates input data.
- * @param  numberOfSamples     Number of samples.
+ * @param  numOfSamples     Number of samples.
  */
-void Demodulator::demodulate(unsigned int numberOfSamples)
+void Demodulator::demodulate(unsigned int numOfSamples)
 {
 	string phase;
-	unsigned int dataLength = (unsigned)m_samples.size()/numberOfSamples;
+	unsigned int dataLength = (unsigned)m_samples.size()/numOfSamples;
 	unsigned int syncSequenceLength = SYNC_SEQUENCE_LENGTH/2;
 
 	// skip the synchronization sequence
 	for (unsigned int i = syncSequenceLength; i < dataLength; i++) {
 		// determine pair of bits corresponding with the phase shift
-		phase = determinePhase(numberOfSamples, i * numberOfSamples);
+		phase = determinePhase(numOfSamples, i * numOfSamples);
 		m_bits.push_back(phase);
 	}
 }
