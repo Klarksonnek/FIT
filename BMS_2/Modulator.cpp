@@ -9,7 +9,7 @@
 #define AMPLITUDE (1.0 * 0x7F000000)
 #define FREQ (1000.0 / SAMPLE_RATE)
 
-#define SAMPLES 15
+#define SAMPLES 30
 #define CHANELS 1
 #define FORMAT (SF_FORMAT_WAV | SF_FORMAT_PCM_24)
 
@@ -21,8 +21,6 @@
 #define SYNC_SEQUENCE_LENGTH 8
 
 using namespace std;
-
-const string SYNC_SEQUENCE = "00110011";
 
 Modulator::Modulator():
 	m_buffer(new int[SAMPLE_RATE])
@@ -43,13 +41,15 @@ void Modulator::modulation()
 	list<char> inputBits;
 	unsigned int length = 0;
 	string outputFile;
+	const string SYNC_SEQUENCE = "00110011";
+
 	// open the input file
 	file.open(m_inputFile.c_str());
 	if (!file.is_open())
 		throw CustomException("input text file cannot be opened");
 
 	// set the output wav file
-	outputFile = setOutputWavFile();
+	outputFile = makeWavFile();
 
 	// insert synchronization sequence at the beginning of list of bits
 	for (unsigned int i = 0; i < SYNC_SEQUENCE_LENGTH; i++)
@@ -80,7 +80,7 @@ void Modulator::setInputTextFile(const string &file)
  * Creates the output filename (wav).
  * @return  Output filename.
  */
-string Modulator::setOutputWavFile()
+string Modulator::makeWavFile()
 {
 	string outputFile;
 

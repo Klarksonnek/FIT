@@ -16,7 +16,7 @@ public:
 	void setInputTextFile(const std::string &file);
 
 private:
-	std::string setOutputWavFile();
+	std::string makeWavFile();
 	unsigned int modulate(std::list<char> &inputBits);
 	void loadBits(std::ifstream &file, std::list<char> &inputBits);
 
