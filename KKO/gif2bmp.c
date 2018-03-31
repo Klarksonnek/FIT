@@ -246,11 +246,21 @@ void GIFFormat::loadBlocks()
 					break;
 				case 0xFF:
 					LOG cout << "Application Extension" << endl;
-					// TODO: handle application extension (just skip appropriate number of bytes)
-					break;
+                    // read until the end of the extension
+                    while (tmpByte != 0x00)
+                        fread(&tmpByte, sizeof(uint8_t),1,m_file);
+                    break;
 				case 0xFE:
-					LOG cout << "" << endl;
-					// TODO: handle extension (just skip appropriate number of bytes)
+					LOG cout << "Comment extension" << endl;
+					uint8_t numberOfBytes;
+                    fread(&numberOfBytes, sizeof(uint8_t),1,m_file);
+                    while (numberOfBytes != 0x00)
+                    {
+                        for (uint8_t i=0; i<numberOfBytes; i++)
+                            fread(&skip, sizeof(uint8_t),1,m_file);
+
+                        fread(&numberOfBytes, sizeof(uint8_t),1,m_file);
+                    }
 					break;
 				default:
 					break;
@@ -506,7 +516,7 @@ void GIFImage::decodeImageData()
 		/// handle the code
 		// the current code value is equal to the clear code
 		//if (m_codeTable.getCurrentCode() == m_localColorTable.getSizeOfColorTable()) {
-		if (m_codeTable.getCurrentCode() == initialCodeSize*initialCodeSize) {
+		if (m_codeTable.getCurrentCode() == pow(2,initialCodeSize)) {
 			LOG cout << "Clear code" << endl;
 			// create code table
 			m_codeTable.initializeCodeTable(&m_localColorTable);
@@ -653,16 +663,7 @@ void GIFImage::createLocalColorTable() {
 
 void GIFImage::handleEmptyGraphicsControlExtension()
 {
-	m_graphicsControlExtension = {
-			0,
-			0,
-			0,
-			0,
-			0,
-			0,
-			0,
-			0
-	};
+	m_graphicsControlExtension = {0,0,0,0,0,0,0,0};
 
 	printGraphicsControlExtension();
 }
@@ -851,18 +852,6 @@ void BMPFormat::handleBMPHeader()
 
 void BMPFormat::setPadding()
 {
-	/*// BMP padding: every line has to be padded to the multiple of four bytes
-	// byte count that have to be added to every line
-	m_paddingSize = static_cast<size_t>((m_gifImage->getImageWidth() * 3) % 4);
-	//printf("initial padding size: %d \n", m_paddingSize);
-
-	// real padding to be used (https://stackoverflow.com/questions/2601365/padding-in-24-bits-rgb-bitmap)
-	if (m_paddingSize != 0)
-		m_paddingSize = 4 - m_paddingSize;
-
-	m_paddingValue = 0;
-	//printf("real padding size: %d\n", m_paddingSize);*/
-
 	// four bytes per pixel, no padding
 	m_paddingSize = 0;
 
