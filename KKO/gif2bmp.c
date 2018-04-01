@@ -663,15 +663,13 @@ void GIFImage::handleEmptyGraphicsControlExtension()
 
 void CodeTable::addRowToCodeTable(vector<uint32_t> r)
 {
-	LOG cout << "Adding row to code table: ";
+	LOG cout << "adding row to code table: ";
+	for (uint32_t i : r)
+		LOG cout << hex << i << " ";
 
-	for (uint32_t i : r) {
-		LOG printf("%d ", i);
-	}
 	LOG cout << endl;
 
 	m_rows.push_back(r);
-
 	m_emptyCode = static_cast<uint32_t>(m_rows.size());
 }
 
@@ -746,11 +744,11 @@ uint32_t CodeTable::getFirstIndexOfCode(uint32_t pc)
 void CodeTable::printCodeTable()
 {
 	for (size_t i = 0; i < m_rows.size(); i++) {
-		LOG printf("code: %llu: ",i);
-		for (uint32_t j : m_rows[i]) {
-			LOG printf("%d ", j);
-		}
-		LOG printf("\n");
+		cout << "code: " << hex << i << ": ";
+		for (uint32_t j : m_rows[i])
+			cout << hex << j << ": ";
+
+		cout << endl;
 	}
 }
 
@@ -766,35 +764,43 @@ uint8_t CodeTable::getInitialCodeSize()
 	return initialCodeSize;
 }
 
-uint8_t CodeTable::getCurrentCodeSize() {
+uint8_t CodeTable::getCurrentCodeSize()
+{
 	return currentCodeSize;
 }
 
-void CodeTable::incrementCurrentCodeSize() {
+void CodeTable::incrementCurrentCodeSize()
+{
 	currentCodeSize++;
 }
 
-void CodeTable::resetCurrentCodeSize() {
+void CodeTable::resetCurrentCodeSize()
+{
 	currentCodeSize = initialCodeSize;
 }
 
-void CodeTable::setCurrentCode(uint32_t cc) {
+void CodeTable::setCurrentCode(uint32_t cc)
+{
 	m_currentCode = cc;
 }
 
-uint32_t CodeTable::getCurrentCode() {
+uint32_t CodeTable::getCurrentCode()
+{
 	return m_currentCode;
 }
 
-void CodeTable::setPreviousCode(uint32_t pc) {
+void CodeTable::setPreviousCode(uint32_t pc)
+{
 	m_previousCode = pc;
 }
 
-uint32_t CodeTable::getPreviousCode() {
+uint32_t CodeTable::getPreviousCode()
+{
 	return m_previousCode;
 }
 
-void CodeTable::clearCodeTable() {
+void CodeTable::clearCodeTable()
+{
 	LOG cout << "clearing code table" << endl;
 
 	m_rows.clear();
@@ -802,16 +808,17 @@ void CodeTable::clearCodeTable() {
 	LOG cout << "size of the code table" << m_rows.size() << endl;
 }
 
-void CodeTable::setCurrentCodeSize(uint8_t ccs) {
-	currentCodeSize = ccs;
+void CodeTable::setCurrentCodeSize(uint8_t size)
+{
+	currentCodeSize = size;
 }
 
-BMPFormat::BMPFormat(GIFFormat* g, FILE* f)
+BMPFormat::BMPFormat(GIFFormat* format, FILE* file)
 {
 	// get parsed data and insert it to BMP file
-	m_gifImage = g->getImageData();
+	m_gifImage = format->getImageData();
 
-	m_file = f;
+	m_file = file;
 
 	// set the padding for the BMP image being created
 	setPadding();
