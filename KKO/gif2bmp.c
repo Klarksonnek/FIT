@@ -711,7 +711,6 @@ void CodeTable::initializeCodeTable(ColorTable *table)
 	}
 
 	m_clearCode = static_cast<uint32_t>(m_rows.size());
-	//Color c{0, 0, 0};
 	// clear index
 	tmp.push_back(m_clearCode);
 	addRowToCodeTable(tmp);
@@ -821,11 +820,9 @@ BMPFormat::BMPFormat(GIFFormat* g, FILE* f)
 void BMPFormat::handleBMPHeader()
 {
 	m_bmpHeader.IDField = 0x4d42;
-	// m_bmpHeader.pixelArrayOffset = 54;
 	// offset = bmpheadersize + dipheadersize
 	m_bmpHeader.pixelArrayOffset = 14 + sizeof(m_dipHeader);
 
-	//m_bmpHeader.sizeOfTheBMPFile = static_cast<uint32_t>(m_bmpHeader.pixelArrayOffset + m_gifImage->getSizeOfTheIndexStream() * 3 + m_gifImage->getImageHeight() * m_paddingSize);
 	m_bmpHeader.sizeOfTheBMPFile = static_cast<uint32_t>(m_bmpHeader.pixelArrayOffset + m_gifImage->getSizeOfTheIndexStream() * 4);
 	m_bmpHeader.reserved = 0000;
 
@@ -839,33 +836,22 @@ void BMPFormat::setPadding()
 {
 	// four bytes per pixel, no padding
 	m_paddingSize = 0;
-
 	m_paddingValue = 0;
-
 }
 
 void BMPFormat::handleDIPHeader()
 {
-	//cout << "size of the IndexStream: ";
-	//printf("%d\n", m_gifImage->getSizeOfTheIndexStream());
-
 	m_dipHeader.sizeOfThdDIPHeader = sizeof(m_dipHeader);
-	//printf("%d\n",m_dipHeader.sizeOfThdDIPHeader);
 	m_dipHeader.bitmapWidth = m_gifImage->getImageWidth();
 	m_dipHeader.bitmapHeight = m_gifImage->getImageHeight();
 	m_dipHeader.numberOfPlanes = 1;
-	//m_dipHeader.bitsPerPixel = 24;
 	m_dipHeader.bitsPerPixel = 32;
-	//m_dipHeader.compression = 0;
 	m_dipHeader.compression = 3; // BI_BITFIELDS
-	// number of pixels * 3 + padding for each line * numberOfLines
-	//m_dipHeader.sizeOfRawBitmapData = static_cast<uint32_t>(m_gifImage->getSizeOfTheIndexStream() * 3 + m_gifImage->getImageHeight() * m_paddingSize);
 	m_dipHeader.sizeOfRawBitmapData = static_cast<uint32_t>(m_gifImage->getSizeOfTheIndexStream() * 4);
 	m_dipHeader.printHorizontalResolution = 0;
 	m_dipHeader.printVerticalResolution = 0;
 	m_dipHeader.numberOfColorsInPallete = 0;
 	m_dipHeader.importantColors = 0;
-
 
 	// transparency
 	m_dipHeader.redChannelBitMask = 0x00ff0000;
@@ -917,7 +903,6 @@ void BMPFormat::handlePixelArray()
 		for (size_t i = 0; i < m_dipHeader.bitmapWidth; i++) {
 			tmp.push_back(m_gifImage->getColorFromColorTable(indexStream.back()));
 			in.push_back(m_gifImage->getColorFromColorTable(indexStream.back()));
-			//printf("%x %x %x \n",  m_gifImage->getColorFromColorTable(indexStream.back()).blue,m_gifImage->getColorFromColorTable(indexStream.back()).green,m_gifImage->getColorFromColorTable(indexStream.back()).red);
 			indexStream.pop_back();
 		}
 
@@ -925,25 +910,6 @@ void BMPFormat::handlePixelArray()
 		reverse(tmp.begin(),tmp.end());
 
 		lines.push_back(tmp);
-
-		LOG cout << endl;
-
-		// save the line to file
-		/*for (size_t i = 0; i < tmp.size(); i++) {
-			//printf("blue: %x\t, green: %x\t, red: %x\n", tmp[i].blue, tmp[i].green, tmp[i].red);
-			fwrite(&tmp[i].blue, sizeof(uint8_t), 1, m_file);
-			fwrite(&tmp[i].green, sizeof(uint8_t), 1, m_file);
-			fwrite(&tmp[i].red, sizeof(uint8_t), 1, m_file);
-
-			uint8_t trnTmp = 0xff;
-			if (tmp[i].transparent)
-				trnTmp = 0;
-
-			fwrite(&trnTmp, sizeof(trnTmp), 1, m_file);
-
-		}*/
-		// write the file padding (not needed for 4B)
-		//fwrite(&m_paddingValue,sizeof(uint8_t),m_paddingSize,m_file);
 
 		tmp.clear();
 		counter++;
