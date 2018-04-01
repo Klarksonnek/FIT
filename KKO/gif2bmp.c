@@ -29,7 +29,6 @@ int gif2bmp(tGIF2BMP* gif2bmp, FILE* inputFile, FILE* outputFile)
 		//gifFile.printLogicalScreenDescriptor();
 
 		if (gifFile.getGlobalColorTableFlag()) {
-			LOG cout << "generating global color table" << endl;
 			// create and print global color table
 			gifFile.createGlobalColorTable();
 		}
@@ -93,8 +92,6 @@ void GIFFormat::loadHeader()
 
 	m_headerFormat.assign(tmpFormat);
 
-	LOG cout << m_headerFormat << endl;
-
 	/// load version of the file
 
 	char tmpVersion[GIF_VERSION_SIZE + 1];
@@ -103,8 +100,6 @@ void GIFFormat::loadHeader()
 	tmpVersion[GIF_VERSION_SIZE] = '\0';
 
 	m_headerVersion.assign(tmpVersion);
-
-	LOG cout << m_headerVersion << endl;
 
 	if (m_headerFormat != "GIF")
  //       retVal =  GIF_ERR_INCORRECT_FORMAT;
@@ -185,7 +180,6 @@ void GIFFormat::loadBlocks()
 		// we have 0 images loaded right now
 		m_numberOfImages = 0;
 
-		LOG printf("%x\n", tmpByte);
 		// extension block
 		if (tmpByte == 0x21) {
 			// select the extension block, that follows (next byte)
@@ -268,7 +262,6 @@ void GIFFormat::loadBlocks()
 		}
 		// image
 		else if (tmpByte == 0x2C) {
-			LOG cout << "Image" << endl;
 			m_image.setFile(m_file);
 
 			if (noGgraphicsExtensionBlock)
@@ -704,8 +697,6 @@ void CodeTable::initializeCodeTable(ColorTable *table)
 		tmp.clear();
 	}
 
-	LOG cout << table->size() << endl;
-
 	// fix for the smaller color table ( number of colors smaller than 4)
 	if (table->size() < 3)
 	{
@@ -736,11 +727,6 @@ void CodeTable::initializeCodeTable(ColorTable *table)
 
 	// set the previous code to clear code
 	m_previousCode = m_clearCode;
-
-	LOG printf("clearCode: %d\n", m_clearCode);
-	LOG printf("endOfInformationCode: %d\n", m_endOfInformationCode);
-	LOG printf("emptyCode: %d\n", m_emptyCode);
-
 }
 
 uint32_t CodeTable::getEmptyCode()
@@ -838,7 +824,6 @@ void BMPFormat::handleBMPHeader()
 	// m_bmpHeader.pixelArrayOffset = 54;
 	// offset = bmpheadersize + dipheadersize
 	m_bmpHeader.pixelArrayOffset = 14 + sizeof(m_dipHeader);
-	LOG printf("%d %d %d\n",sizeof(m_bmpHeader),sizeof(m_dipHeader), m_bmpHeader.pixelArrayOffset);
 
 	//m_bmpHeader.sizeOfTheBMPFile = static_cast<uint32_t>(m_bmpHeader.pixelArrayOffset + m_gifImage->getSizeOfTheIndexStream() * 3 + m_gifImage->getImageHeight() * m_paddingSize);
 	m_bmpHeader.sizeOfTheBMPFile = static_cast<uint32_t>(m_bmpHeader.pixelArrayOffset + m_gifImage->getSizeOfTheIndexStream() * 4);
@@ -927,12 +912,9 @@ void BMPFormat::handlePixelArray()
 
 	// loop until the index stream is not empty
 	while (!indexStream.empty()) {
-		LOG cout << "line: " << counter << endl;
-
 		vector<Color> tmp;
 		// load width of image of colors into the temporary vector
 		for (size_t i = 0; i < m_dipHeader.bitmapWidth; i++) {
-			LOG printf("%d ",indexStream.back());
 			tmp.push_back(m_gifImage->getColorFromColorTable(indexStream.back()));
 			in.push_back(m_gifImage->getColorFromColorTable(indexStream.back()));
 			//printf("%x %x %x \n",  m_gifImage->getColorFromColorTable(indexStream.back()).blue,m_gifImage->getColorFromColorTable(indexStream.back()).green,m_gifImage->getColorFromColorTable(indexStream.back()).red);
@@ -964,9 +946,6 @@ void BMPFormat::handlePixelArray()
 		//fwrite(&m_paddingValue,sizeof(uint8_t),m_paddingSize,m_file);
 
 		tmp.clear();
-
-		LOG cout << indexStream.size() << endl;
-
 		counter++;
 	}
 

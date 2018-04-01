@@ -89,7 +89,6 @@ int main(int argc, char *argv[])
 
 	tGIF2BMP gifData = {0,0};
 	int conversion = gif2bmp(&gifData, inputFile, outputFile);
-	LOG cout << "Conversion result: " << conversion << endl;
 
 	if (!params.logFile.empty() && conversion == 0) {
 		string log;
