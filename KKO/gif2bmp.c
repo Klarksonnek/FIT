@@ -864,26 +864,7 @@ void BMPFormat::handleDIPHeader()
 	// clear array
 	m_dipHeader.empty[BMP_DIPHEADER_EMPTYSIZE] = {0};
 
-	fwrite(&m_dipHeader.sizeOfThdDIPHeader, sizeof(m_dipHeader.sizeOfThdDIPHeader), 1, m_file);
-	fwrite(&m_dipHeader.bitmapWidth, sizeof(m_dipHeader.bitmapWidth), 1, m_file);
-	fwrite(& m_dipHeader.bitmapHeight, sizeof( m_dipHeader.bitmapHeight), 1,m_file);
-	fwrite(&m_dipHeader.numberOfPlanes, sizeof(m_dipHeader.numberOfPlanes), 1, m_file);
-	fwrite(&m_dipHeader.bitsPerPixel, sizeof(m_dipHeader.bitsPerPixel), 1, m_file);
-	fwrite(&m_dipHeader.compression, sizeof(m_dipHeader.compression), 1, m_file);
-	fwrite(&m_dipHeader.sizeOfRawBitmapData, sizeof(m_dipHeader.sizeOfRawBitmapData), 1, m_file);
-	fwrite(&m_dipHeader.printHorizontalResolution, sizeof(m_dipHeader.printHorizontalResolution), 1, m_file);
-	fwrite(&m_dipHeader.printVerticalResolution, sizeof(m_dipHeader.printVerticalResolution), 1, m_file);
-	fwrite(&m_dipHeader.numberOfColorsInPallete, sizeof(m_dipHeader.numberOfColorsInPallete), 1, m_file);
-	fwrite(&m_dipHeader.importantColors, sizeof(m_dipHeader.importantColors), 1, m_file);
-
-	fwrite(&m_dipHeader.redChannelBitMask, sizeof(m_dipHeader.redChannelBitMask), 1, m_file);
-	fwrite(&m_dipHeader.greenChannelBitMask, sizeof(m_dipHeader.greenChannelBitMask), 1, m_file);
-	fwrite(&m_dipHeader.blueChannelBitMask, sizeof(m_dipHeader.blueChannelBitMask), 1, m_file);
-	fwrite(&m_dipHeader.alphaChannelBitMask, sizeof(m_dipHeader.alphaChannelBitMask), 1, m_file);
-
-	fwrite(&m_dipHeader.win, sizeof(m_dipHeader.win), 1, m_file);
-
-	fwrite(&m_dipHeader.empty, sizeof(m_dipHeader.empty), 1, m_file);
+	fwrite(&m_dipHeader, sizeof(m_dipHeader), 1, m_file);
 }
 
 void BMPFormat::handlePixelArray()
