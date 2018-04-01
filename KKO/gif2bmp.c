@@ -123,14 +123,14 @@ void GIFFormat::loadLogicalScreenDescriptor()
 
 void GIFFormat::printLogicalScreenDescriptor()
 {
-	LOG printf("%d\n", m_logicalScreenDescriptor.canvasWidth);
-	LOG printf("%d\n", m_logicalScreenDescriptor.canvasHeight);
-	LOG printf("%d\n", m_logicalScreenDescriptor.sizeOfGlobalColorTable);
-	LOG printf("%d\n", m_logicalScreenDescriptor.sortFlag);
-	LOG printf("%d\n", m_logicalScreenDescriptor.colorResolution);
-	LOG printf("%d\n", m_logicalScreenDescriptor.globalColorTableFlag);
-	LOG printf("%d\n", m_logicalScreenDescriptor.backgroundColorIndex);
-	LOG printf("%d\n", m_logicalScreenDescriptor.pixelAspectRatio);
+	printf("%d\n", m_logicalScreenDescriptor.canvasWidth);
+	printf("%d\n", m_logicalScreenDescriptor.canvasHeight);
+	printf("%d\n", m_logicalScreenDescriptor.sizeOfGlobalColorTable);
+	printf("%d\n", m_logicalScreenDescriptor.sortFlag);
+	printf("%d\n", m_logicalScreenDescriptor.colorResolution);
+	printf("%d\n", m_logicalScreenDescriptor.globalColorTableFlag);
+	printf("%d\n", m_logicalScreenDescriptor.backgroundColorIndex);
+	printf("%d\n", m_logicalScreenDescriptor.pixelAspectRatio);
 }
 
 void GIFFormat::createGlobalColorTable()
@@ -294,13 +294,13 @@ void GIFImage::handleGraphicsControlExtension()
 
 void GIFImage::printGraphicsControlExtension()
 {
-	LOG printf("byteSize: %d\n", m_graphicsControlExtension.byteSize);
-	LOG printf("transparentColorFlag: %d\n", m_graphicsControlExtension.transparentColorFlag);
-	LOG printf("userInputFlag: %d\n", m_graphicsControlExtension.userInputFlag);
-	LOG printf("disposalMethod: %d\n", m_graphicsControlExtension.disposalMethod);
-	LOG printf("delayTime: %d\n", m_graphicsControlExtension.delayTime);
-	LOG printf("transparentColorIndex: %d\n", m_graphicsControlExtension.transparentColorIndex);
-	LOG printf("blockTerminator: %d\n", m_graphicsControlExtension.blockTerminator);
+	printf("byteSize: %d\n", m_graphicsControlExtension.byteSize);
+	printf("transparentColorFlag: %d\n", m_graphicsControlExtension.transparentColorFlag);
+	printf("userInputFlag: %d\n", m_graphicsControlExtension.userInputFlag);
+	printf("disposalMethod: %d\n", m_graphicsControlExtension.disposalMethod);
+	printf("delayTime: %d\n", m_graphicsControlExtension.delayTime);
+	printf("transparentColorIndex: %d\n", m_graphicsControlExtension.transparentColorIndex);
+	printf("blockTerminator: %d\n", m_graphicsControlExtension.blockTerminator);
 }
 
 
@@ -658,7 +658,7 @@ void GIFImage::handleEmptyGraphicsControlExtension()
 {
 	m_graphicsControlExtension = {0,0,0,0,0,0,0,0};
 
-	printGraphicsControlExtension();
+	LOG printGraphicsControlExtension();
 }
 
 void CodeTable::addRowToCodeTable(vector<uint32_t> r)
