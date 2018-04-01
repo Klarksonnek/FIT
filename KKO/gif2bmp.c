@@ -60,20 +60,6 @@ int gif2bmp(tGIF2BMP* gif2bmp, FILE* inputFile, FILE* outputFile)
 	}
 
 	return status;
-
-	/*// TODO: handle any number of images inside one file
-	// TODO: handle errors (return value from loading, or try/catch)
-	//load blocks
-	gifFile.loadBlocks();
-
-	// the GIF file was parsed successfully, generate the BMP file
-	BMPFormat bmpFile(&gifFile, outputFile);
-
-	bmpFile.handleBMPHeader();
-	bmpFile.handleDIPHeader();
-	bmpFile.handlePixelArray();
-
-	return CONVERSION_COMPLETED;*/
 }
 
 GIFFormat::GIFFormat (FILE* f)
