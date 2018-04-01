@@ -91,5 +91,21 @@ int main(int argc, char *argv[])
 	int conversion = gif2bmp(&gifData, inputFile, outputFile);
 	LOG cout << "Conversion result: " << conversion << endl;
 
+	if (!params.logFile.empty() && conversion == 0) {
+		string log;
+		log += "login = xnecas24\n";
+		log += "uncodedSize = " + to_string(gifData.bmpSize) + "\n";
+		log += "codedSize = " + to_string(gifData.gifSize) + "\n";
+
+		ofstream out(params.logFile);
+		if (out.is_open()) {
+			out << log << endl;
+			out.close();
+		}
+		else {
+			cerr << "log file error" << endl;
+		}
+	}
+
 	return 0;
 }

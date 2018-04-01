@@ -80,8 +80,8 @@ testGIFtoBMP() {
     /bin/rm -rf ${FILE}
 
     echo "login = ${LOGIN}" >> ${FILE}
-    echo "uncodedSize = ${GIF_SIZE}" >> ${FILE}
-    echo "codedSize = ${BMP_SIZE}" >> ${FILE}
+    echo "uncodedSize = ${BMP_SIZE}" >> ${FILE}
+    echo "codedSize = ${GIF_SIZE}" >> ${FILE}
     echo "" >> ${FILE}
 
     diff "${DIR_LOG}/${2%%.*}.out" "${DIR_LOG}/${2%%.*}.out_ref"
