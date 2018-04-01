@@ -25,8 +25,6 @@
 #define DEBUG_ENABLE false
 #define LOG if (DEBUG_ENABLE)
 
-using namespace std;
-
 #define GIF_FORMAT_SIZE 3
 #define GIF_VERSION_SIZE 3
 #define GIF_LOGICAL_SCREEN_DESCRIPTOR_SIZE 7
@@ -35,6 +33,11 @@ using namespace std;
 
 #define CONVERSION_COMPLETED 0
 #define CONVERSION_ERROR -1
+
+typedef struct {
+	int64_t bmpSize;
+	int64_t gifSize;
+} tGIF2BMP;
 
 struct __attribute__ ((packed)) GraphicsControlExtension {
 	uint8_t byteSize;
@@ -75,135 +78,23 @@ struct Color {
 	uint8_t green;
 	uint8_t blue;
 	bool transparent;
+
+	Color():
+		red(0),
+		green(0),
+		blue(0),
+		transparent(false)
+	{
+	}
+
+	Color(uint8_t red, uint8_t green, uint8_t blue, bool transparent):
+		red(red),
+		green(green),
+		blue(blue),
+		transparent(transparent)
+	{
+	}
 };
-
-class ColorTable {
-public:
-	void setSize(uint32_t s);
-	uint32_t size();
-
-	void insert(Color c);
-	void print();
-	Color getColorFromColorTable(uint32_t i);
-	void setTransparencyToIndex(uint16_t i);
-
-private:
-	uint32_t m_size;
-	vector<Color> m_content; // colors in the color/code table
-};
-
-class CodeTable {
-public:
-	void initializeCodeTable(ColorTable*);
-	void addRowToCodeTable(vector<uint32_t>);
-	uint32_t getFirstIndexOfCode(uint32_t);
-	vector<uint32_t> getCode(uint32_t);
-	uint32_t getClearCode();
-	uint32_t getEmptyCode();
-	uint32_t getEndOfInformationCode();
-	void printCodeTable();
-	void setInitialCodeSize(uint8_t);
-	void incrementCurrentCodeSize();
-	uint8_t getCurrentCodeSize();
-	void setCurrentCodeSize(uint8_t);
-	void resetCurrentCodeSize();
-	uint8_t getInitialCodeSize();
-
-	void setCurrentCode(uint32_t);
-	uint32_t getCurrentCode();
-	void setPreviousCode(uint32_t);
-	uint32_t getPreviousCode();
-
-	void clearCodeTable();
-
-private:
-	vector<vector<uint32_t>> m_rows;
-	uint32_t m_clearCode;
-	uint32_t m_endOfInformationCode;
-	uint32_t m_emptyCode;
-	uint32_t m_currentCode;
-	uint32_t m_previousCode;
-	uint8_t initialCodeSize;
-	uint8_t currentCodeSize;
-};
-
-class GIFImage {
-private:
-	FILE* m_file;
-	GraphicsControlExtension m_graphicsControlExtension;
-	ImageDescriptor m_imageDescriptor;
-	ColorTable* m_globalColorTable;
-	ColorTable m_localColorTable;
-	vector<uint32_t> m_indexStream;
-	CodeTable m_codeTable;
-
-public:
-	void setFile(FILE*);
-
-	void loadImage(ColorTable* gct);
-
-	void loadImageDescriptor();
-	void printImageDescriptor();
-
-	bool getLocalColorTableFlag();
-	void setLocalColorTable(ColorTable* table);
-
-	void createLocalColorTable();
-
-	void handleGraphicsControlExtension();
-	void handleEmptyGraphicsControlExtension();
-	void printGraphicsControlExtension();
-
-	void decodeImageData();
-
-	size_t getSizeOfTheIndexStream();
-
-	uint16_t getImageWidth();
-	uint16_t getImageHeight();
-
-	vector<uint32_t> getIndexStream();
-	Color getColorFromColorTable(uint32_t);
-
-	bool isImageInterlaced();
-};
-
-
-
-
-class GIFFormat  {
-private:
-	int m_status;
-	vector<uint8_t> m_data;
-
-	FILE* m_file;
-	string m_headerFormat;
-	string m_headerVersion;
-	LogicalScreenDescriptor m_logicalScreenDescriptor;
-	ColorTable m_globalColorTable;
-	GIFImage m_image;
-
-	uint8_t m_numberOfImages;
-
-public:
-	GIFFormat (FILE*);
-
-	void loadHeader();
-
-	void loadLogicalScreenDescriptor();
-	void printLogicalScreenDescriptor();
-
-	bool getGlobalColorTableFlag();
-	uint8_t getSizeOfGlobalColorTable();
-	void createGlobalColorTable();
-	ColorTable getColorTable();
-
-	void loadBlocks();
-	GIFImage* getImageData();
-
-	int64_t getFileSize();
-};
-
-////////////////////////////////////////////////////////////
 
 struct BMPHeader {
 	uint16_t IDField; // ID Field (0x4d42) //2
@@ -232,18 +123,127 @@ struct DIPHeader {
 	uint8_t empty[BMP_DIPHEADER_EMPTYSIZE];
 };
 
-class BMPFormat {
+class ColorTable {
+public:
+	void setSize(uint32_t s);
+	uint32_t size();
+
+	void insert(Color c);
+	void print();
+	Color colorFromColorTable(uint32_t i);
+	void setTransparencyToIndex(uint16_t i);
+
+private:
+	uint32_t m_size;
+	std::vector<Color> m_content; // colors in the color/code table
+};
+
+class CodeTable {
+public:
+	void initializeCodeTable(ColorTable*);
+	void addRowToCodeTable(std::vector<uint32_t>);
+	uint32_t firstIndexOfCode(uint32_t);
+	std::vector<uint32_t> code(uint32_t);
+	uint32_t clearCode();
+	uint32_t emptyCode();
+	uint32_t endOfInformationCode();
+
+	void setInitialCodeSize(uint8_t);
+	void incrementCurrentCodeSize();
+	uint8_t getCurrentCodeSize();
+	void setCurrentCodeSize(uint8_t);
+	void resetCurrentCodeSize();
+
+	void setCurrentCode(uint32_t);
+	uint32_t currentCode();
+
+	void setPreviousCode(uint32_t);
+	uint32_t previousCode();
+
+	void clearCodeTable();
+
+private:
+	std::vector<std::vector<uint32_t>> m_rows;
+	uint32_t m_clearCode;
+	uint32_t m_endOfInformationCode;
+	uint32_t m_emptyCode;
+	uint32_t m_currentCode;
+	uint32_t m_previousCode;
+	uint8_t m_initialCodeSize;
+	uint8_t m_currentCodeSize;
+};
+
+class GIFImage {
+public:
+	void setFile(FILE*);
+
+	void loadImage(ColorTable* gct);
+
+	void loadImageDescriptor();
+	void printImageDescriptor();
+
+	bool getLocalColorTableFlag();
+
+	void createLocalColorTable();
+
+	void handleGraphicsControlExtension();
+	void handleEmptyGraphicsControlExtension();
+	void printGraphicsControlExtension();
+
+	void decodeImageData();
+
+	size_t getSizeOfTheIndexStream();
+
+	uint16_t getImageWidth();
+	uint16_t getImageHeight();
+
+	std::vector<uint32_t> getIndexStream();
+	Color getColorFromColorTable(uint32_t);
+
+	bool isImageInterlaced();
+
 private:
 	FILE* m_file;
+	GraphicsControlExtension m_graphicsControlExtension;
+	ImageDescriptor m_imageDescriptor;
+	ColorTable* m_globalColorTable;
+	ColorTable m_localColorTable;
+	std::vector<uint32_t> m_indexStream;
+	CodeTable m_codeTable;
+};
 
-	GIFImage* m_gifImage;
-	BMPHeader m_bmpHeader;
-	DIPHeader m_dipHeader;
+class GIFFormat  {
+public:
+	GIFFormat(FILE*);
 
-	size_t m_paddingSize;
-	uint8_t m_paddingValue;
+	void loadHeader();
 
+	void loadLogicalScreenDescriptor();
 
+	bool getGlobalColorTableFlag();
+	uint8_t getSizeOfGlobalColorTable();
+	void createGlobalColorTable();
+
+	void loadBlocks();
+	GIFImage* getImageData();
+
+	int64_t getFileSize();
+
+private:
+	int m_status;
+	std::vector<uint8_t> m_data;
+
+	FILE* m_file;
+	std::string m_headerFormat;
+	std::string m_headerVersion;
+	LogicalScreenDescriptor m_logicalScreenDescriptor;
+	ColorTable m_globalColorTable;
+	GIFImage m_image;
+
+	uint8_t m_numberOfImages;
+};
+
+class BMPFormat {
 public:
 	BMPFormat(GIFFormat*, FILE*);
 
@@ -253,14 +253,17 @@ public:
 	void handleDIPHeader();
 	void handlePixelArray();
 
-uint64_t getBMPSize();
+	uint64_t getBMPSize();
+
+private:
+	FILE* m_file;
+
+	GIFImage* m_gifImage;
+	BMPHeader m_bmpHeader;
+	DIPHeader m_dipHeader;
+
+	size_t m_paddingSize;
+	uint8_t m_paddingValue;
 };
 
-typedef struct {
-	int64_t bmpSize;
-	int64_t gifSize;
-} tGIF2BMP;
-
-
 int gif2bmp(tGIF2BMP *gif2bmp, FILE* inputFile, FILE* outputFile);
-
