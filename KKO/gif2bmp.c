@@ -623,7 +623,8 @@ void CodeTable::initializeCodeTable(ColorTable *table)
 	}
 
 	// fix for the smaller color table ( number of colors smaller than 4)
-	if (table->size() < 3) {
+	if (table->size() < 3)
+	{
 		size_t toFill = 4 - table->size(); // how many do we need to fill
 
 		for (size_t i = 0; i < toFill; i++) {

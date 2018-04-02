@@ -20,7 +20,15 @@ struct Params {
 
 void printHelp()
 {
-	cout << "..." << endl;
+	const string helpMsg =
+			"Conversion of GIF image to BMP image\n "
+	"Parameters:\n"
+	"-h  prints help message\n"
+	"-i  <file> input file name\n"
+ 	"-o  <file> output file name\n"
+	"-l  <file> log file name with input GIF size and output BMP size";
+
+	cout << helpMsg << endl;
 }
 
 int getParams(int argc, char *argv[], Params *params)
