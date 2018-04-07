@@ -59,7 +59,6 @@ int gif2bmp(tGIF2BMP* gif2bmp, FILE* inputFile, FILE* outputFile)
 GIFFormat::GIFFormat (FILE* file)
 {
 	m_file = file;
-	m_status = 0;
 }
 
 void GIFFormat::loadHeader()
@@ -137,9 +136,6 @@ void GIFFormat::loadBlocks()
 
 	// loop until the end of the image (or until the number of processed images is not equal to 1)
 	while (tmpByte != 0x3b) {
-		// we have 0 images loaded right now
-		m_numberOfImages = 0;
-
 		// extension block
 		if (tmpByte == 0x21) {
 			// select the extension block, that follows (next byte)
@@ -152,9 +148,8 @@ void GIFFormat::loadBlocks()
 			switch (extensionBlockType) {
 				case 0xF9 :
 					LOG cout << "Graphics Extension Block" << endl;
-					m_image.setFile(m_file);
 					noGraphicsExtensionBlock = false;
-					m_image.handleGraphicsControlExtension();
+					handleGraphicsControlExtension();
 					break;
 
 				case 0x01:
@@ -222,12 +217,11 @@ void GIFFormat::loadBlocks()
 		}
 		// image
 		else if (tmpByte == 0x2C) {
-			m_image.setFile(m_file);
 
 			if (noGraphicsExtensionBlock)
-				m_image.handleEmptyGraphicsControlExtension();
+				handleEmptyGraphicsControlExtension();
 
-			m_image.loadImage(&m_globalColorTable);
+			loadImage();
 			break;
 		}
 
@@ -236,7 +230,7 @@ void GIFFormat::loadBlocks()
 	}
 }
 
-void GIFImage::handleGraphicsControlExtension()
+void GIFFormat::handleGraphicsControlExtension()
 {
 	// read the extension block into memory
 	fread(&m_graphicsControlExtension, sizeof(m_graphicsControlExtension), 1, m_file);
@@ -250,7 +244,7 @@ void GIFImage::handleGraphicsControlExtension()
 	}
 }
 
-void GIFImage::printGraphicsControlExtension()
+void GIFFormat::printGraphicsControlExtension()
 {
 	printf("byteSize: %d\n", m_graphicsControlExtension.byteSize);
 	printf("transparentColorFlag: %d\n", m_graphicsControlExtension.transparentColorFlag);
@@ -261,13 +255,14 @@ void GIFImage::printGraphicsControlExtension()
 	printf("blockTerminator: %d\n", m_graphicsControlExtension.blockTerminator);
 }
 
-void GIFImage::loadImage(ColorTable* gct)
+void GIFFormat::loadImage()
 {
 	loadImageDescriptor();
 	LOG printImageDescriptor();
 
 	// local color table exists
-	if (getLocalColorTableFlag()) {
+	if (getLocalColorTableFlag())
+	{
 		LOG cout << "Local color table detected" << endl;
 
 		// load data and fill local color table
@@ -275,7 +270,7 @@ void GIFImage::loadImage(ColorTable* gct)
 	}
 	else {
 		// use global color table instead
-		m_localColorTable = *gct;
+		m_localColorTable = m_globalColorTable;
 	}
 
 	// if there is a transparency present
@@ -289,10 +284,10 @@ void GIFImage::loadImage(ColorTable* gct)
 	decodeImageData();
 }
 
-GIFImage *GIFFormat::getImageData()
+/*GIFFormat *GIFFormat::getImageData()
 {
 	return &m_image;
-}
+}*/
 
 int64_t GIFFormat::getFileSize() {
 
@@ -306,7 +301,7 @@ int64_t GIFFormat::getFileSize() {
 	return size;
 }
 
-bool GIFImage::isImageInterlaced()
+bool GIFFormat::isImageInterlaced()
 {
 	return 1 == m_imageDescriptor.interlaceFlag;
 }
@@ -350,12 +345,12 @@ void ColorTable::setTransparencyToIndex(uint16_t i)
 	m_content[i].transparent = true;
 }
 
-void GIFImage::loadImageDescriptor()
+void GIFFormat::loadImageDescriptor()
 {
 	fread(&m_imageDescriptor, sizeof(m_imageDescriptor), 1, m_file);
 }
 
-void GIFImage::printImageDescriptor()
+void GIFFormat::printImageDescriptor()
 {
 	LOG printf("imageLeft: %d\n", m_imageDescriptor.imageLeft);
 	LOG printf("imageTop: %d\n", m_imageDescriptor.imageTop);
@@ -367,17 +362,12 @@ void GIFImage::printImageDescriptor()
 	LOG printf("localColorTableFlag: %d\n", m_imageDescriptor.localColorTableFlag);
 }
 
-void GIFImage::setFile(FILE *file)
-{
-	m_file = file;
-}
-
-bool GIFImage::getLocalColorTableFlag()
+bool GIFFormat::getLocalColorTableFlag()
 {
 	return m_imageDescriptor.localColorTableFlag;
 }
 
-void GIFImage::decodeImageData()
+void GIFFormat::decodeImageData()
 {
 	uint8_t blockSize;
 	uint8_t initialCodeSize;
@@ -389,37 +379,14 @@ void GIFImage::decodeImageData()
 	// number of bits used (initially and currently)
 	m_codeTable.setInitialCodeSize(initialCodeSize);
 
-	// read the size of the following block (first block)
-	fread(&blockSize,sizeof(uint8_t), 1, m_file);
+    // read the size of the following block (first block)
+    fread(&blockSize,sizeof(uint8_t), 1, m_file);
 
-	// until data is available
-	while (blockSize != 0x00) {
-		string bits;
-
-		// for block saving
-		vector<uint8_t> data;
-		uint8_t value;
-
-		for (uint8_t i = 0; i < blockSize; i++) {
-			fread(&value, sizeof(uint8_t), 1, m_file);
-			data.push_back(value);
-		}
-
-		// uint8_t to binary string conversion and creating of one string
-		for (int i = blockSize - 1; i >= 0; i--) {
-			bitset<8> set(data[i]);
-			bits.append(set.to_string());
-		}
-
-		// create final string from created strings
-		bitsAll.insert(bitsAll.begin(), bits.begin(), bits.end());
-
-		// read the size of the following block
-		fread(&blockSize, sizeof(uint8_t), 1, m_file);
-	}
+    loadDataBits(blockSize,&bitsAll);
 
 	// until all bits are parsed, keep loading additional codes
-	while (!bitsAll.empty()) {
+	while (!bitsAll.empty())
+	{
 		string tmp;
 		// get following code from the bit stream
 		for (int i = 0; i < m_codeTable.getCurrentCodeSize(); i++) {
@@ -545,32 +512,32 @@ void GIFImage::decodeImageData()
 	}
 }
 
-size_t GIFImage::getSizeOfTheIndexStream()
+size_t GIFFormat::getSizeOfTheIndexStream()
 {
 	return m_indexStream.size();
 }
 
-uint16_t GIFImage::getImageHeight()
+uint16_t GIFFormat::getImageHeight()
 {
 	return m_imageDescriptor.imageHeight;
 }
 
-uint16_t GIFImage::getImageWidth()
+uint16_t GIFFormat::getImageWidth()
 {
 	return m_imageDescriptor.imageWidth;
 }
 
-vector<uint32_t> GIFImage::getIndexStream()
+vector<uint32_t> GIFFormat::getIndexStream()
 {
 	return m_indexStream;
 }
 
-Color GIFImage::getColorFromColorTable(uint32_t index)
+Color GIFFormat::getColorFromColorTable(uint32_t index)
 {
 	return m_localColorTable.colorFromColorTable(index);
 }
 
-void GIFImage::createLocalColorTable()
+void GIFFormat::createLocalColorTable()
 {
 	m_localColorTable.setSize(m_imageDescriptor.sizeOfLocalColorTable);
 
@@ -582,10 +549,41 @@ void GIFImage::createLocalColorTable()
 	}
 }
 
-void GIFImage::handleEmptyGraphicsControlExtension()
+void GIFFormat::handleEmptyGraphicsControlExtension()
 {
 	m_graphicsControlExtension = {0, 0, 0, 0, 0, 0, 0, 0};
 	LOG printGraphicsControlExtension();
+}
+
+void GIFFormat::loadDataBits(uint8_t blockSize, string* dataBits)
+{
+
+    // until data is available
+    while (blockSize != 0x00) {
+        string bits;
+
+        // for block saving
+        vector<uint8_t> data;
+        uint8_t value;
+
+        for (uint8_t i = 0; i < blockSize; i++) {
+            fread(&value, sizeof(uint8_t), 1, m_file);
+            data.push_back(value);
+        }
+
+        // uint8_t to binary string conversion and creating of one string
+        for (int i = blockSize - 1; i >= 0; i--) {
+            bitset<8> set(data[i]);
+            bits.append(set.to_string());
+        }
+
+        // create final string from created strings
+        dataBits->insert(dataBits->begin(), bits.begin(), bits.end());
+
+        // read the size of the following block
+        fread(&blockSize, sizeof(uint8_t), 1, m_file);
+    }
+
 }
 
 void CodeTable::addRowToCodeTable(vector<uint32_t> row)
@@ -725,7 +723,7 @@ void CodeTable::setCurrentCodeSize(uint8_t size)
 BMPFormat::BMPFormat(GIFFormat* format, FILE* file)
 {
 	// get parsed data and insert it to BMP file
-	m_gifImage = format->getImageData();
+	m_gifFormat = format;
 
 	m_file = file;
 
@@ -738,7 +736,7 @@ void BMPFormat::handleBMPHeader()
 	m_bmpHeader.IDField = 0x4d42;
 	m_bmpHeader.pixelArrayOffset = 14 + sizeof(m_dipHeader);
 
-	m_bmpHeader.sizeOfTheBMPFile = static_cast<uint32_t>(m_bmpHeader.pixelArrayOffset + m_gifImage->getSizeOfTheIndexStream() * 4);
+	m_bmpHeader.sizeOfTheBMPFile = static_cast<uint32_t>(m_bmpHeader.pixelArrayOffset + m_gifFormat->getSizeOfTheIndexStream() * 4);
 	m_bmpHeader.reserved = 0000;
 
 	fwrite(&m_bmpHeader.IDField, sizeof(uint16_t), 1, m_file);
@@ -757,12 +755,12 @@ void BMPFormat::setPadding()
 void BMPFormat::handleDIPHeader()
 {
 	m_dipHeader.sizeOfThdDIPHeader = sizeof(m_dipHeader);
-	m_dipHeader.bitmapWidth = m_gifImage->getImageWidth();
-	m_dipHeader.bitmapHeight = m_gifImage->getImageHeight();
+	m_dipHeader.bitmapWidth = m_gifFormat->getImageWidth();
+	m_dipHeader.bitmapHeight = m_gifFormat->getImageHeight();
 	m_dipHeader.numberOfPlanes = 1;
 	m_dipHeader.bitsPerPixel = 32;
 	m_dipHeader.compression = 3; // BI_BITFIELDS
-	m_dipHeader.sizeOfRawBitmapData = static_cast<uint32_t>(m_gifImage->getSizeOfTheIndexStream() * 4);
+	m_dipHeader.sizeOfRawBitmapData = static_cast<uint32_t>(m_gifFormat->getSizeOfTheIndexStream() * 4);
 	m_dipHeader.printHorizontalResolution = 0;
 	m_dipHeader.printVerticalResolution = 0;
 	m_dipHeader.numberOfColorsInPallete = 0;
@@ -783,23 +781,23 @@ void BMPFormat::handleDIPHeader()
 
 void BMPFormat::handlePixelArray()
 {
-	uint32_t width = m_gifImage->getImageWidth();
-	uint32_t size = m_gifImage->getImageHeight() * width;
+	uint32_t width = m_gifFormat->getImageWidth();
+	uint32_t size = m_gifFormat->getImageHeight() * width;
 
-	vector<uint32_t> indexStream =  m_gifImage->getIndexStream();
+	vector<uint32_t> indexStream =  m_gifFormat->getIndexStream();
 	vector<Color> in;
 
 	// loop until the index stream is not empty
 	while (!indexStream.empty()) {
 		for (size_t i = 0; i < m_dipHeader.bitmapWidth; i++) {
-			in.push_back(m_gifImage->getColorFromColorTable(indexStream.back()));
+			in.push_back(m_gifFormat->getColorFromColorTable(indexStream.back()));
 			indexStream.pop_back();
 		}
 	}
 
 	reverse(in.begin(), in.end());
 
-	if (m_gifImage->isImageInterlaced()) {
+	if (m_gifFormat->isImageInterlaced()) {
 		vector<Color> out(size, {0, 0, 0, false});
 		size_t newIndex, oldIndex;
 		size_t j = 0;
