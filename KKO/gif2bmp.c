@@ -11,31 +11,31 @@ using namespace std;
 
 int gif2bmp(tGIF2BMP* gif2bmp, FILE* inputFile, FILE* outputFile)
 {
-	// create a GIF file object gifFile
+	// creates a GIF file object gifFile
 	GIFFormat gifFile(inputFile);
 
-	// get the file size for the statistics
+	// gets the file size for the statistics
 	gif2bmp->gifSize = gifFile.getFileSize();
 
 	// status variable (state of the conversion)
 	int8_t status = CONVERSION_COMPLETED;
 
 	try {
-		// load file header, check the file type and version
+		// loads file header, checks the file type and version
 		gifFile.loadHeader();
 
-		// load and print logical screen descriptor
+		// loads and prints logical screen descriptor
 		gifFile.loadLogicalScreenDescriptor();
 
 		if (gifFile.getGlobalColorTableFlag()) {
-			// create and print global color table
+			// creates and prints global color table
 			gifFile.createGlobalColorTable();
 		}
 
-		//load blocks
+		//loads blocks
 		gifFile.loadBlocks();
 
-		// the GIF file was parsed successfully, generate the BMP file
+		// the GIF file was parsed successfully, generates the BMP file
 		BMPFormat bmpFile(&gifFile, outputFile);
 
 		bmpFile.handleBMPHeader();
@@ -63,14 +63,14 @@ GIFFormat::GIFFormat (FILE* file)
 
 void GIFFormat::loadHeader()
 {
-	// load format of the file
+	// loads format of the file
 	char tmpFormat[GIF_FORMAT_SIZE + 1];
 	fread(&tmpFormat,  sizeof(uint8_t), GIF_FORMAT_SIZE, m_file);
 	tmpFormat[GIF_FORMAT_SIZE] = '\0';
 
 	m_headerFormat.assign(tmpFormat);
 
-	// load version of the file
+	// loads version of the file
 	char tmpVersion[GIF_VERSION_SIZE + 1];
 	fread(&tmpVersion, sizeof(uint8_t), GIF_VERSION_SIZE, m_file);
 	tmpVersion[GIF_VERSION_SIZE] = '\0';
@@ -88,18 +88,18 @@ void GIFFormat::loadLogicalScreenDescriptor()
 {
 	size_t itemCnt = fread(&m_logicalScreenDescriptor, sizeof(m_logicalScreenDescriptor), 1, m_file);
 
-	// check if was read successfully all items
+	// checks if all items were read successfully
 	if (itemCnt * sizeof(m_logicalScreenDescriptor) != GIF_LOGICAL_SCREEN_DESCRIPTOR_SIZE)
 		throw runtime_error("incorrect size of the logical screen descriptor");
 }
 
 void GIFFormat::createGlobalColorTable()
 {
-	// set size of the globalColorTable from the descriptor
+	// sets size of the global color table from the descriptor
 	m_globalColorTable.setSize(getSizeOfGlobalColorTable());
 
 	for (size_t i = 0; i < m_globalColorTable.size(); i++) {
-		// is c transparent? cant tell in the global color table, so false for all colors
+		// no information about transparency of colors, set to false for all colors
 		Color c{0, 0, 0, false};
 
 		size_t itemCnt = fread(&c, 3 * sizeof(uint8_t), 1, m_file);
@@ -128,17 +128,17 @@ void GIFFormat::loadBlocks()
 
 	uint8_t tmpByte;
 
-	// read next byte
+	// reads next byte
 	count = fread(&tmpByte, sizeof(uint8_t), 1, m_file);
 
 	if (count != 1)
 		throw runtime_error("file structure error");
 
-	// loop until the end of the image (or until the number of processed images is not equal to 1)
+	// loops until the end of the image is loaded (or until the number of processed images is not equal to 1)
 	while (tmpByte != 0x3b) {
 		// extension block
 		if (tmpByte == 0x21) {
-			// select the extension block, that follows (next byte)
+			// selects the extension block, that follows (next byte)
 			uint8_t extensionBlockType;
 			count = fread(&extensionBlockType, sizeof(uint8_t), 1, m_file);
 
@@ -155,14 +155,14 @@ void GIFFormat::loadBlocks()
 				case 0x01:
 					LOG cout << "Plain Text Extension" << endl;
 
-					// how many bytes can we skip?
+					// number of bytes that can be skipped
 					uint8_t skip;
 					count = fread(&skip, sizeof(uint8_t), 1, m_file);
 
 					if (count != 1)
 						throw runtime_error("block structure error");
 
-					// skip the skip number of bytes
+					// skip given number of bytes
 					count = fread(nullptr, sizeof(uint8_t), skip, m_file);
 
 					if (count != 1)
@@ -175,15 +175,15 @@ void GIFFormat::loadBlocks()
 					if (count != 1)
 						throw runtime_error("block structure error");
 
-					// loop until blockSize is not 0
+					// loops until blockSize is 0
 					while (blockSize != 0x00) {
-						// read blockSize of bytes
+						// reads blockSize of bytes
 						count = fread(nullptr, sizeof(uint8_t), blockSize, m_file);
 
 						if (count != blockSize)
 							throw runtime_error("block structure error");
 
-						// read the byte following the block to determine, if its over or not
+						// reads the next byte to determine if algorithm should continue
 						count = fread(&blockSize, sizeof(uint8_t), skip, m_file);
 
 						if (count != 1)
@@ -193,13 +193,13 @@ void GIFFormat::loadBlocks()
 
 				case 0xFF:
 					LOG cout << "Application Extension" << endl;
-					// read until the end of the extension
+					// reads until the end of the extension is loaded
 					while (tmpByte != 0x00)
 						fread(&tmpByte, sizeof(uint8_t), 1, m_file);
 					break;
 
 				case 0xFE:
-					LOG cout << "Comment extension" << endl;
+					LOG cout << "Comment Extension" << endl;
 					uint8_t numberOfBytes;
 					fread(&numberOfBytes, sizeof(uint8_t), 1, m_file);
 
@@ -225,22 +225,22 @@ void GIFFormat::loadBlocks()
 			break;
 		}
 
-		// temporary read to prevent infinite looping
+		// prevents infinite looping
 		fread(&tmpByte, sizeof(uint8_t), 1, m_file);
 	}
 }
 
 void GIFFormat::handleGraphicsControlExtension()
 {
-	// read the extension block into memory
+	// reads the extension block into memory
 	fread(&m_graphicsControlExtension, sizeof(m_graphicsControlExtension), 1, m_file);
 
-	// print the controlExtension (debug)
+	// prints the GraphicsControlExtension (debug)
 	LOG printGraphicsControlExtension();
 
-	// animations detected
+	// animations were detected
 	if (m_graphicsControlExtension.delayTime != 0) {
-		LOG cout << "GIF file contains animations. Converting first image." << endl;
+		LOG cout << "GIF file contains animations, convert the first image" << endl;
 	}
 }
 
@@ -260,32 +260,32 @@ void GIFFormat::loadImage()
 	loadImageDescriptor();
 	LOG printImageDescriptor();
 
-	// local color table exists
+	// if local color table exists
 	if (getLocalColorTableFlag())
 	{
 		LOG cout << "Local color table detected" << endl;
 
-		// load data and fill local color table
+		// loads data and fills local color table
 		createLocalColorTable();
 	}
 	else {
-		// use global color table instead
+		// uses global color table instead local color table
 		m_localColorTable = m_globalColorTable;
 	}
 
-	// if there is a transparency present
+	// if there is a transparency
 	if (m_graphicsControlExtension.transparentColorFlag == 1)
 		m_localColorTable.setTransparencyToIndex(m_graphicsControlExtension.transparentColorIndex);
 
-	// print current color table
+	// prints current color table
 	LOG m_localColorTable.print();
 
-	// decode image data
+	// decodes image data
 	decodeImageData();
 }
 
-int64_t GIFFormat::getFileSize() {
-
+int64_t GIFFormat::getFileSize()
+{
 	int64_t size = 0;
 
 	fseek(m_file, 0, SEEK_END);
@@ -326,7 +326,6 @@ void ColorTable::print()
 		cout << dec << unsigned(item.red) << " ";
 		cout << dec << item.transparent << endl;
 	}
-
 	cout << "end" << endl;
 }
 
@@ -368,22 +367,22 @@ void GIFFormat::decodeImageData()
 	uint8_t initialCodeSize;
 	string bitsAll;
 
-	// read the initial code size
+	// reads the initial code size
 	fread(&initialCodeSize, sizeof(uint8_t), 1, m_file);
 
-	// number of bits used (initially and currently)
+	// used number of bits (initially and currently)
 	m_codeTable.setInitialCodeSize(initialCodeSize);
 
-	// read the size of the following block (first block)
-	fread(&blockSize,sizeof(uint8_t), 1, m_file);
+	// reads the size of the following block (first block)
+	fread(&blockSize, sizeof(uint8_t), 1, m_file);
 
 	loadDataBits(blockSize,&bitsAll);
 
-	// until all bits are parsed, keep loading additional codes
+	// until all bits are parsed, keeps loading additional codes
 	while (!bitsAll.empty())
 	{
 		string tmp;
-		// get following code from the bit stream
+		// gets following code from the bit stream
 		for (int i = 0; i < m_codeTable.getCurrentCodeSize(); i++) {
 			tmp.push_back(bitsAll.back());
 			bitsAll.pop_back();
@@ -395,7 +394,7 @@ void GIFFormat::decodeImageData()
 			}
 		}
 
-		// due to the endiennes, reverse the loaded sequence of bits
+		// due to reading from MSB, reverses the loaded sequence of bits
 		reverse(tmp.begin(), tmp.end());
 
 		// string to unsigned long integer conversion
@@ -413,7 +412,7 @@ void GIFFormat::decodeImageData()
 		if (m_codeTable.currentCode() == pow(2, initialCodeSize)) {
 			LOG cout << "Clear code" << endl;
 
-			// create code table
+			// creates code table
 			m_codeTable.initializeCodeTable(&m_localColorTable);
 			m_codeTable.resetCurrentCodeSize();
 		}
@@ -430,42 +429,40 @@ void GIFFormat::decodeImageData()
 				LOG cout << "clearCode: " << m_codeTable.clearCode() << endl;
 				LOG cout << "codeValue: " << m_codeTable.currentCode() << endl;
 
-				// place the color index into the index stream
+				// places the color index into the index stream
 				vector<uint32_t> tmpInsert;
 				tmpInsert = m_codeTable.code(m_codeTable.currentCode());
 				m_indexStream.insert(m_indexStream.end(), tmpInsert.begin(), tmpInsert.end());
 			}
-			// if the currentCode is not in the code table
+			// if the current code is not in the code table
 			else if (m_codeTable.currentCode() >= m_codeTable.emptyCode()) {
 				LOG cout << "Code is not in the codeTable" << endl;
 
-				// get the first index of the previous code
+				// gets the first index of the previous code
 				uint32_t k = m_codeTable.firstIndexOfCode(m_codeTable.previousCode());
 
-				// modify the code stream
+				// modifies the code stream
 				vector<uint32_t> tmpPreviousCode = m_codeTable.code(m_codeTable.previousCode());
 				vector<uint32_t> tmpInsert;
 				tmpInsert.insert(tmpInsert.end(), tmpPreviousCode.begin(), tmpPreviousCode.end());
 
-				// add k to the end
+				// adds k to the end
 				tmpInsert.push_back(k);
 
-				// add previous code
+				// adds previous code
 				m_indexStream.insert(m_indexStream.end(), tmpInsert.begin(), tmpInsert.end());
 
-				LOG cout << "Value inserted into the indexStream: ";
+				LOG cout << "Value inserted into the index stream: ";
 				for (const auto &item : tmpInsert)
 					LOG cout << hex << item << " ";
-
 				LOG cout << endl;
 
-				// add new row to the code table (variable tmpInsert)
+				// adds new row to the code table (variable tmpInsert)
 				m_codeTable.addRowToCodeTable(tmpInsert);
 
 				LOG cout << "Value inserted into the code table: " ;
 				for (const auto &item : tmpInsert)
 					LOG cout << hex << item << " ";
-
 				LOG cout << endl;
 			}
 			else {
@@ -478,7 +475,6 @@ void GIFFormat::decodeImageData()
 				LOG cout << "Value inserted into the index stream: " ;
 				for (const auto &item : tmpCode)
 					LOG cout << hex << item << " ";
-
 				LOG cout << endl;
 
 				// k is the first index of the current code
@@ -490,16 +486,16 @@ void GIFFormat::decodeImageData()
 				tmpInsert.insert(tmpInsert.end(), tmpPreviousCode.begin(), tmpPreviousCode.end());
 				tmpInsert.push_back(k);
 
-				// add new row to the codeTable (variable tmpInsert)
+				// adds new row to the code table (variable tmpInsert)
 				m_codeTable.addRowToCodeTable(tmpInsert);
 			}
 		}
 
-		// increment number of bits
+		// increments number of bits
 		if (m_codeTable.emptyCode() == pow(2, m_codeTable.getCurrentCodeSize()))
 			m_codeTable.incrementCurrentCodeSize();
 
-		// if the m_currentCodeSize exceeds the maximum codeSize, set it to the maximumSize (12)
+		// if the m_currentCodeSize exceeds the maximum codeSize, sets it to the maximumSize (12)
 		if (m_codeTable.getCurrentCodeSize() >= 13)
 			m_codeTable.setCurrentCodeSize(12);
 
@@ -571,20 +567,19 @@ void GIFFormat::loadDataBits(uint8_t blockSize, string* dataBits)
 			bits.append(set.to_string());
 		}
 
-		// create final string from created strings
+		// creates final string from created strings
 		dataBits->insert(dataBits->begin(), bits.begin(), bits.end());
 
-		// read the size of the following block
+		// reads the size of the following block
 		fread(&blockSize, sizeof(uint8_t), 1, m_file);
 	}
 }
 
 void CodeTable::addRowToCodeTable(vector<uint32_t> row)
 {
-	LOG cout << "adding row to code table: ";
+	LOG cout << "Adding row to code table: ";
 	for (uint32_t i : row)
 		LOG cout << hex << unsigned(i) << " ";
-
 	LOG cout << endl;
 
 	m_rows.push_back(row);
@@ -603,7 +598,7 @@ uint32_t CodeTable::clearCode()
 
 void CodeTable::initializeCodeTable(ColorTable *table)
 {
-	// clear the code table if it contains something
+	// clears the code table if it contains something
 	clearCodeTable();
 
 	vector<uint32_t> tmp;
@@ -613,10 +608,10 @@ void CodeTable::initializeCodeTable(ColorTable *table)
 		tmp.clear();
 	}
 
-	// fix for the smaller color table ( number of colors smaller than 4)
+	// fixes for the smaller color table (number of colors is smaller than 4)
 	if (table->size() < 3)
 	{
-		size_t toFill = 4 - table->size(); // how many do we need to fill
+		size_t toFill = 4 - table->size();
 
 		for (size_t i = 0; i < toFill; i++) {
 			tmp.push_back(static_cast<unsigned char>(m_rows.size()));
@@ -634,14 +629,13 @@ void CodeTable::initializeCodeTable(ColorTable *table)
 
 	m_endOfInformationCode = static_cast<uint32_t>(m_rows.size());
 
-	// end of data index
 	tmp.push_back(m_endOfInformationCode);
 	addRowToCodeTable(tmp);
 	tmp.clear();
 
 	m_emptyCode = static_cast<uint32_t>(m_rows.size());
 
-	// set the previous code to clear code
+	// sets the previous code to clear code
 	m_previousCode = m_clearCode;
 }
 
@@ -703,9 +697,9 @@ uint32_t CodeTable::previousCode()
 
 void CodeTable::clearCodeTable()
 {
-	LOG cout << "clearing code table" << endl;
+	LOG cout << "Clearing code table" << endl;
 	m_rows.clear();
-	LOG cout << "size of the code table" << m_rows.size() << endl;
+	LOG cout << "Size of the code table " << m_rows.size() << endl;
 }
 
 void CodeTable::setCurrentCodeSize(uint8_t size)
@@ -715,12 +709,12 @@ void CodeTable::setCurrentCodeSize(uint8_t size)
 
 BMPFormat::BMPFormat(GIFFormat* format, FILE* file)
 {
-	// get parsed data and insert it to BMP file
+	// gets parsed data and inserts it to BMP file
 	m_gifFormat = format;
 
 	m_file = file;
 
-	// set the padding for the BMP image being created
+	// sets the padding for the BMP image being created
 	setPadding();
 }
 
@@ -747,12 +741,12 @@ void BMPFormat::setPadding()
 
 void BMPFormat::handleDIPHeader()
 {
-	m_dipHeader.sizeOfThdDIPHeader = sizeof(m_dipHeader);
+	m_dipHeader.sizeOfTheDIPHeader = sizeof(m_dipHeader);
 	m_dipHeader.bitmapWidth = m_gifFormat->getImageWidth();
 	m_dipHeader.bitmapHeight = m_gifFormat->getImageHeight();
 	m_dipHeader.numberOfPlanes = 1;
 	m_dipHeader.bitsPerPixel = 32;
-	m_dipHeader.compression = 3; // BI_BITFIELDS
+	m_dipHeader.compression = 3;
 	m_dipHeader.sizeOfRawBitmapData = static_cast<uint32_t>(m_gifFormat->getSizeOfTheIndexStream() * 4);
 	m_dipHeader.printHorizontalResolution = 0;
 	m_dipHeader.printVerticalResolution = 0;
@@ -766,8 +760,8 @@ void BMPFormat::handleDIPHeader()
 	m_dipHeader.alphaChannelBitMask = 0xff000000;
 	m_dipHeader.win = 0x206E6957;
 
-	// clear array
-	m_dipHeader.empty[BMP_DIPHEADER_EMPTYSIZE] = {0};
+	// clears array
+	m_dipHeader.empty[BMP_DIP_HEADER_EMPTYSIZE] = {0};
 
 	fwrite(&m_dipHeader, sizeof(m_dipHeader), 1, m_file);
 }
@@ -780,7 +774,7 @@ void BMPFormat::handlePixelArray()
 	vector<uint32_t> indexStream =  m_gifFormat->getIndexStream();
 	vector<Color> in;
 
-	// loop until the index stream is not empty
+	// loops until the index stream is empty
 	while (!indexStream.empty()) {
 		for (size_t i = 0; i < m_dipHeader.bitmapWidth; i++) {
 			in.push_back(m_gifFormat->getColorFromColorTable(indexStream.back()));
@@ -791,47 +785,47 @@ void BMPFormat::handlePixelArray()
 	reverse(in.begin(), in.end());
 
 	if (m_gifFormat->isImageInterlaced()) {
-		vector<Color> out(size, {0, 0, 0, false});
-		size_t newIndex, oldIndex;
-		size_t j = 0;
-		size_t start = 0;
+		vector<Color> output(size, {0, 0, 0, false});
+		size_t newPosition, oldPosition;
+		size_t i = 0;
+		size_t startPosition = 0;
 
-		for (; start < size; start += 8 * width, j += width) {
-			newIndex = start;
-			oldIndex = j;
+		for (; startPosition < size; startPosition += 8 * width, i += width) {
+			newPosition = startPosition;
+			oldPosition = i;
 
-			for (uint32_t m = 0; m < width; m++, newIndex++, oldIndex++)
-				out.at(newIndex) = in.at(oldIndex);
+			for (uint32_t j = 0; j < width; j++, newPosition++, oldPosition++)
+				output.at(newPosition) = in.at(oldPosition);
 		}
 
-		start = 4 * width;
-		for (; start < size; start += 8 * width, j += width) {
-			newIndex = start;
-			oldIndex = j;
+		startPosition = 4 * width;
+		for (; startPosition < size; startPosition += 8 * width, i += width) {
+			newPosition = startPosition;
+			oldPosition = i;
 
-			for (uint32_t m = 0; m < width; m++, newIndex++, oldIndex++)
-				out.at(newIndex) = in.at(oldIndex);
+			for (uint32_t m = 0; m < width; m++, newPosition++, oldPosition++)
+				output.at(newPosition) = in.at(oldPosition);
 		}
 
-		start = width * 2;
-		for (; start < size; start += 4 * width, j += width) {
-			newIndex = start;
-			oldIndex = j;
+		startPosition = width * 2;
+		for (; startPosition < size; startPosition += 4 * width, i += width) {
+			newPosition = startPosition;
+			oldPosition = i;
 
-			for (uint32_t m = 0; m < width; m++, newIndex++, oldIndex++)
-				out.at(newIndex) = in.at(oldIndex);
+			for (uint32_t m = 0; m < width; m++, newPosition++, oldPosition++)
+				output.at(newPosition) = in.at(oldPosition);
 		}
 
-		start = width * 1;
-		for (; start < size; start += 2 * width, j += width) {
-			newIndex = start;
-			oldIndex = j;
+		startPosition = width * 1;
+		for (; startPosition < size; startPosition += 2 * width, i += width) {
+			newPosition = startPosition;
+			oldPosition = i;
 
-			for (uint32_t m = 0; m < width; m++, newIndex++, oldIndex++)
-				out.at(newIndex) = in.at(oldIndex);
+			for (uint32_t m = 0; m < width; m++, newPosition++, oldPosition++)
+				output.at(newPosition) = in.at(oldPosition);
 		}
 
-		in = out;
+		in = output;
 	}
 
 	vector<vector <Color>> dLines;
@@ -846,7 +840,7 @@ void BMPFormat::handlePixelArray()
 
 	reverse(dLines.begin(),dLines.end());
 
-	// we have deiterlaced image, we can write it to file
+	// interspersing removed, writes image to file
 	for (const auto &dLine : dLines) {
 		for (const auto &item : dLine) {
 			fwrite(&item.blue, sizeof(uint8_t), 1, m_file);
@@ -862,6 +856,7 @@ void BMPFormat::handlePixelArray()
 	}
 }
 
-uint64_t BMPFormat::getBMPSize() {
+uint64_t BMPFormat::getBMPSize()
+{
 	return m_bmpHeader.sizeOfTheBMPFile;
 }

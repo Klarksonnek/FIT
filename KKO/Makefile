@@ -1,5 +1,5 @@
-CC=g++                     # překladač jazyka C++
-FLAGS= -Wall -pedantic -g  # parametry překladace
+CC=g++                     # C++ compiler
+FLAGS= -Wall -pedantic -g  # compiler parameters
 COMPILE = $(CC) $(FLAGS)
 
 all: main
@@ -12,4 +12,3 @@ debug:
 
 clean:
 	rm -f gif2bmp
-	

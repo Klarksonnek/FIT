@@ -8,18 +8,18 @@
 #pragma once
 
 #include <algorithm>
-#include <cstdint>
 #include <bitset>
 #include <cmath>
+#include <cstdint>
 #include <fstream>
 #include <iostream>
 #include <iterator>
+#include <map>
 #include <string>
 #include <vector>
-#include <map>
 
 /**
- * true ak sa maju povolit debug vypisy
+ * Set to true to allow debug prints.
  */
 #define DEBUG_ENABLE false
 #define LOG if (DEBUG_ENABLE)
@@ -28,7 +28,7 @@
 #define GIF_VERSION_SIZE 3
 #define GIF_LOGICAL_SCREEN_DESCRIPTOR_SIZE 7
 
-#define BMP_DIPHEADER_EMPTYSIZE 48
+#define BMP_DIP_HEADER_EMPTYSIZE 48
 
 #define CONVERSION_COMPLETED 0
 #define CONVERSION_ERROR -1
@@ -38,21 +38,15 @@
  */
 typedef struct
 {
-	/**
-	 * size of the output (BMP file)
-	 *
-	 */
+	// size of the output (BMP file)
 	int64_t bmpSize;
-	/**
-	 * size of the input (GIF file)
-	 */
+	// size of the input (GIF file)
 	int64_t gifSize;
 } tGIF2BMP;
 
 /**
- * structure, that defines the content of the Graphics control extension.
+ * Content of the Graphics control extension.
  * Size of the members is equal to the size read from the input file.
- *
  * @see http://giflib.sourceforge.net/whatsinagif/bits_and_bytes.html
  */
 struct __attribute__ ((packed)) GraphicsControlExtension
@@ -68,9 +62,8 @@ struct __attribute__ ((packed)) GraphicsControlExtension
 };
 
 /**
- * structure, that defines the content of the Image descriptor. Size
- * of the members is equal to the size read from the input file.
- *
+ * Content of the Image descriptor.
+ * Size of the members is equal to the size read from the input file.
  * @see http://giflib.sourceforge.net/whatsinagif/bits_and_bytes.html
  */
 struct __attribute__ ((packed)) ImageDescriptor
@@ -87,9 +80,9 @@ struct __attribute__ ((packed)) ImageDescriptor
 };
 
 /**
- * structure, that defines the content of the Logical screen descriptor.
+ * Content of the Logical screen descriptor.
  * Size of the members is equal to the size read from the input file.
- * http://giflib.sourceforge.net/whatsinagif/bits_and_bytes.html
+ * @see http://giflib.sourceforge.net/whatsinagif/bits_and_bytes.html
  */
 struct __attribute__ ((packed)) LogicalScreenDescriptor
 {
@@ -104,26 +97,18 @@ struct __attribute__ ((packed)) LogicalScreenDescriptor
 };
 
 /**
- * structure, that defines the color in the color table of the GIF file.
- * http://giflib.sourceforge.net/whatsinagif/bits_and_bytes.html
+ * Color in the color table of the GIF file.
+ * @see http://giflib.sourceforge.net/whatsinagif/bits_and_bytes.html
  */
 struct Color
 {
-	/**
-	 * Red byte.
-	 */
+	// red byte
 	uint8_t red;
-	/**
-	 * Green byte.
-	 */
+	//green byte
 	uint8_t green;
-	/**
-	 * Blue byte.
-	 */
+	// blue byte
 	uint8_t blue;
-	/**
-	 * Color transparency.
-	 */
+	// color transparency
 	bool transparent;
 
 	Color():
@@ -144,84 +129,83 @@ struct Color
 };
 
 /**
- * Structure, that represents the header of the bitmap file.
- * https://en.wikipedia.org/wiki/BMP_file_format
+ * Header of the BMP file.
+ * @see https://en.wikipedia.org/wiki/BMP_file_format
  */
 struct BMPHeader
 {
-	uint16_t IDField; // ID Field (0x4d42) //2
-	uint32_t sizeOfTheBMPFile; // 4
-	uint32_t reserved; // 4
-	uint32_t pixelArrayOffset; // 54 // 4
+	uint16_t IDField; // ID Field (0x4d42)
+	uint32_t sizeOfTheBMPFile;
+	uint32_t reserved;
+	uint32_t pixelArrayOffset;
 };
 
 /**
- * Structure, that represents the DIP header of the BMP file.
- * https://en.wikipedia.org/wiki/BMP_file_format
+ * DIP header of the BMP file.
+ * @see https://en.wikipedia.org/wiki/BMP_file_format
  */
 struct DIPHeader
 {
-	uint32_t sizeOfThdDIPHeader; // 40
-	uint32_t bitmapWidth; // gif->width
-	uint32_t bitmapHeight; // git->height
-	uint16_t numberOfPlanes; // 1
-	uint16_t bitsPerPixel; // 24
-	uint32_t compression; // 0;
-	uint32_t sizeOfRawBitmapData; // calculate;
-	uint32_t printHorizontalResolution; //0
-	uint32_t printVerticalResolution; // 0
-	uint32_t numberOfColorsInPallete; // 0
-	uint32_t importantColors; // 0
+	uint32_t sizeOfTheDIPHeader;
+	uint32_t bitmapWidth;
+	uint32_t bitmapHeight;
+	uint16_t numberOfPlanes;
+	uint16_t bitsPerPixel;
+	uint32_t compression;
+	uint32_t sizeOfRawBitmapData;
+	uint32_t printHorizontalResolution;
+	uint32_t printVerticalResolution;
+	uint32_t numberOfColorsInPallete;
+	uint32_t importantColors;
 	uint32_t redChannelBitMask;
 	uint32_t greenChannelBitMask;
 	uint32_t blueChannelBitMask;
 	uint32_t alphaChannelBitMask;
 	uint32_t win;
-	uint8_t empty[BMP_DIPHEADER_EMPTYSIZE];
+	uint8_t empty[BMP_DIP_HEADER_EMPTYSIZE];
 };
 
 /**
- * Class for manipulating the color table of GIF files
+ * Class for manipulating the color table of GIF files.
  */
 class ColorTable
 {
 public:
 	/**
-	 * Sets the size of the Color table
-	 * @param s Color depth
+	 * Sets the size of the color table.
+	 * @param s Color depth.
 	 */
 	void setSize(uint32_t s);
+	/**
+	 * Gets the size of the color table.
+	 * @return size of color table.
+	 */
 	uint32_t size();
-
 	/**
 	 * Inserts color into the color table.
 	 * @param c Color to be inserted into the color table.
 	 */
 	void insert(Color c);
 	/**
-	 * Auxillary method, that prints the entire color table to the stdout.
+	 * Prints the entire color table to the stdout (auxiliary method).
 	 */
 	void print();
 	/**
 	 * Gets the specified color from the color table.
 	 * @param i Index of the color to be retrieved.
-	 * @return the retrieved color
+	 * @return the retrieved color.
 	 */
 	Color colorFromColorTable(uint32_t i);
 	/**
-	 * Method sets the color, that is transparent.
+	 * Sets the color, that is transparent.
 	 * @param i Index of the transparent color.
 	 */
 	void setTransparencyToIndex(uint16_t i);
 
 private:
-	/**
-	 * Size of the color table.
-	 */
+	// size of the color table
 	uint32_t m_size;
-	/**
-	 * Content of the color table.
-	 */
+	// content of the color table
 	std::vector<Color> m_content;
 };
 
@@ -233,15 +217,15 @@ class CodeTable
 {
 public:
 	/**
-	 * Method initializes the code table to the initial state.
+	 * Initializes the code table to the initial state.
 	 */
 	void initializeCodeTable(ColorTable*);
 	/**
-	 * Method adds new entry to the code table.
+	 * Adds new entry to the code table.
 	 */
 	void addRowToCodeTable(std::vector<uint32_t>);
 	/**
-	 * Method that obtains the first index of the selected code from
+	 * Obtains the first index of the selected code from
 	 * the code table.
 	 * @return First index of the selected code.
 	 */
@@ -252,106 +236,86 @@ public:
 	 */
 	std::vector<uint32_t> code(uint32_t);
 	/**
-	 * Method gets clear code.
+	 * Gets clear code.
 	 * @return clear code.
 	 */
 	uint32_t clearCode();
 	/**
-	 * Method gets current empty code (row that can be used to save new code).
-	 * @return empty code
+	 * Gets current empty code (row that can be used to save new code).
+	 * @return empty code.
 	 */
 	uint32_t emptyCode();
 	/**
-	 * Method gets end of information code.
+	 * Gets end of information code.
 	 * @return end of information code.
 	 */
 	uint32_t endOfInformationCode();
 
 	/**
-	 * Method sets initial code size for the decoding.
+	 * Sets initial code size for the decoding.
 	 */
 	void setInitialCodeSize(uint8_t);
 	/**
-	 * Method increment current code size
+	 * Increments current code size.
 	 */
 	void incrementCurrentCodeSize();
 	/**
-	 * Method gets current code size.
-	 * @return Current code size.
+	 * Gets current code size.
+	 * @return current code size.
 	 */
 	uint8_t getCurrentCodeSize();
 	/**
-	 * Method sets current code size.
+	 * Sets current code size.
 	 */
 	void setCurrentCodeSize(uint8_t);
 	/**
-	 * Method resets the code size to the initial size.
+	 * Resets the code size to the initial size.
 	 */
 	void resetCurrentCodeSize();
-
 	/**
-	 * Method sets the current code to be decoded.
+	 * Sets the current code to be decoded.
 	 */
 	void setCurrentCode(uint32_t);
-
 	/**
-	 * Method returns the current code.
+	 * Returns the current code.
 	 * @return current code that is being decoded.
 	 */
 	uint32_t currentCode();
-
 	/**
-	 * Method sets previous code, that was deocded in the previous step.
+	 * Sets previous code, that was decoded in the previous step.
 	 */
 	void setPreviousCode(uint32_t);
-
 	/**
-	 * Method gets previous code.
+	 * Gets previous code.
+	 * @return previous code.
 	 */
 	uint32_t previousCode();
-
 	/**
-	 * Method clears code table to the initial state.
+	 * Clears code table to the initial state.
 	 */
 	void clearCodeTable();
 
 private:
-	/**
-	 * Data of the code table (individual rows)
-	 */
+	// data of the code table (individual rows)
 	std::vector<std::vector<uint32_t>> m_rows;
-	/**
-	 * Clear code
-	 */
+	// clear code
 	uint32_t m_clearCode;
-	/**
-	 * End of information code
-	 */
+	// end of information code
 	uint32_t m_endOfInformationCode;
-	/**
-	 * Current empty code (the place to save new code)
-	 */
+	// current empty code (the place to save new code)
 	uint32_t m_emptyCode;
-	/**
-	 * Currently handeled code
-	 */
+	// currently handled code
 	uint32_t m_currentCode;
-	/**
-	 * Previously handeled code
-	 */
+	// previously handled code
 	uint32_t m_previousCode;
-	/**
-	 * Initial code size
-	 */
+	// initial code size
 	uint8_t m_initialCodeSize;
-	/**
-	 * Current code size
-	 */
+	// current code size
 	uint8_t m_currentCodeSize;
 };
 
 /**
- * Class, that represents the GIF file.
+ * Class representing the GIF file.
  */
 class GIFFormat
 {
@@ -360,188 +324,147 @@ public:
 	 * Constructor of the class. Loads the open file descriptor.
 	 */
 	GIFFormat(FILE*);
-
 	/**
-	 * Method, that loads the file header of the GIF file.
+	 * Loads the file header of the GIF file.
 	 */
 	void loadHeader();
-
 	/**
-	 * Method, that loads the logical screen descriptor of the GIF file.
+	 * Loads the Logical screen descriptor of the GIF file.
 	 */
 	void loadLogicalScreenDescriptor();
-
 	/**
-	 * Method gets the global color table flag. If the global color
-	 * table is present, we can load it.
-	 * @return
+	 * Gets the global color table flag. If the Global color
+	 * table is present, it can be loaded.
+	 * @return global color table flag.
 	 */
 	bool getGlobalColorTableFlag();
 	/**
-	 * Method gets the size of the global color table based on the
+	 * Gets the size of the global color table based on the
 	 * loaded color depth.
-	 * @return
+	 * @return size of global color table.
 	 */
 	uint8_t getSizeOfGlobalColorTable();
 	/**
-	 * Method loads the color data from file.
+	 * Loads the color data from file.
 	 */
 	void createGlobalColorTable();
-
 	/**
-	 * This method handles the loading of the remaining blocks,
+	 * Handles the loading of the remaining blocks,
 	 * that comprise the GIF file.
 	 */
 	void loadBlocks();
-
 	/**
-	 * Method calculates the size of the GIF file in bytes.
-	 * @return size of the GIF file in bytes
+	 * Calculates the size of the GIF file in bytes.
+	 * @return size of the GIF file in bytes.
 	 */
 	int64_t getFileSize();
 
-	// image methods
-
 	/**
-	 * Method handles the image blocks (image desriptor, local color
+	 * Handles the image blocks (image descriptor, local color
 	 * table and image data)
 	 */
 	void loadImage();
-
 	/**
-	 * Method loads the image descriptor.
+	 * Loads the image descriptor.
 	 */
 	void loadImageDescriptor();
-
 	/**
-	 * Auxillary method, that prints the content of the image descriptor
-	 * to the stdout.
+	 * Prints the content of the image descriptor
+	 * to the stdout (auxiliary method).
 	 */
 	void printImageDescriptor();
-
 	/**
-	 * Method, that gets the value of the local color table flag. If the
+	 * Gets the local color table flag. If the
 	 * flag is set to true, the local color table is present and needs
 	 * to be loaded and used for the image.
+	 * @return local color table flag.
 	 */
 	bool getLocalColorTableFlag();
-
 	/**
-	 * Method creates the local color table.
+	 * Creates the local color table.
 	 */
 	void createLocalColorTable();
-
 	/**
-	 * Method handles the graphics control extension (animations, transparency)
+	 * Handles the graphics control extension (animations, transparency).
 	 */
 	void handleGraphicsControlExtension();
 	/**
-	 * Method handles the special case of missing graphics control extension.
+	 * Handles the special case of missing graphics control extension.
 	 */
 	void handleEmptyGraphicsControlExtension();
-
 	/**
-	* Auxillary method, that prints the content of the graphics control
-	 * extension to the stdout.
+	* Prints the content of the graphics control
+	* extension to the stdout (auxiliary method).
 	*/
 	void printGraphicsControlExtension();
-
 	/**
-	 * Method decodes the image data (LZW)
+	 * Decodes the image data (LZW).
 	 */
 	void decodeImageData();
-
 	/**
-	 * Method loads the data from the input file and stores them as bits
+	 * Loads the data from the input file and stores them as bits
 	 * that will be decoded.
-	 * @param blockSize initial block size
-	 * @param dataBits string with bits, that will be filled (entire bit
-	 * stream at the end)
+	 * @param blockSize Initial block size.
+	 * @param dataBits String with bits, that will be filled (entire bit
+	 * stream at the end).
 	 */
 	void loadDataBits(uint8_t blockSize, std::string* dataBits);
-
 	/**
-	 * Method gets the number of pixels that were decoded.
+	 * Gets the number of pixels that were decoded.
 	 * @return  size of the index stream.
 	 */
 	size_t getSizeOfTheIndexStream();
-
-
 	/**
-	 * Method gets the image width from the image descriptor.
-	 * @return image width
+	 * Gets the image width from the image descriptor.
+	 * @return image width.
 	 */
 	uint16_t getImageWidth();
 	/**
-	 * Method gets the image height from the image descriptor.
-	* @return image height
+	 * Gets the image height from the image descriptor.
+	* @return image height.
 	*/
 	uint16_t getImageHeight();
-
 	/**
-	 * Method gets the entire index stream.
+	 * Gets the entire index stream.
 	 * @return index stream.
 	 */
 	std::vector<uint32_t> getIndexStream();
-
 	/**
-	 * Method returns the selected color from the local color table.
+	 * Returns the selected color from the local color table.
 	 * @return selected color from the local color table.
 	 */
 	Color getColorFromColorTable(uint32_t);
-
 	/**
-	 * Is the image interlaced?
-	 * @return method returns true if the imege is interlaced, false otherwise
+	 * Finds out if the image is interlaced.
+	 * @return true if the image is interlaced, false otherwise.
 	 */
 	bool isImageInterlaced();
 
 private:
-	/**
-	 * Pointer to the opened GIF file.
-	 */
+	// pointer to the opened GIF file
 	FILE* m_file;
-	/**
-	 * Saved format from the file header.
-	 */
+	// saved format from the file header
 	std::string m_headerFormat;
-	/**
-	 * Saved version from the file header.
-	 */
+	// saved version from the file header
 	std::string m_headerVersion;
-	/**
-	 * Logical screen descriptor.
-	 */
+	// logical screen descriptor
 	LogicalScreenDescriptor m_logicalScreenDescriptor;
-	/**
-	 * Global color table.
-	 */
+	// global color table
 	ColorTable m_globalColorTable;
-
-	/**
-	 * Graphics control extension.
-	 */
+	// graphics control extension
 	GraphicsControlExtension m_graphicsControlExtension;
-	/**
-	 * Image descriptor.
-	 */
+	// image descriptor
 	ImageDescriptor m_imageDescriptor;
-	/**
-	 * Local color table
-	 */
+	// local color table
 	ColorTable m_localColorTable;
-	/**
-	 * Index stream. The ouput of the decoding of the image data.
-	 */
+	// index stream, the ouput of the decoding of the image data
 	std::vector<uint32_t> m_indexStream;
-	/**
-	 * Code table (dictionary) for the modified LZW algorithm.
-	 */
+	// code table (dictionary) for the modified LZW algorithm
 	CodeTable m_codeTable;
 };
 
 /**
- * Class, that represents the BMP file
+ * Class representing the BMP file.
  */
 class BMPFormat
 {
@@ -551,63 +474,46 @@ public:
 	 * to the opened BMP file (for writing).
 	 */
 	BMPFormat(GIFFormat*, FILE*);
-
 	/**
-	 * Method, that sets the required padding (mostly unused, due to
+	 * Sets the required padding (mostly unused, due to
 	 * the transparency).
 	 */
 	void setPadding();
-
 	/**
-	 * Method, that handles the BMP header. It fills the header with
+	 * Handles the BMP header. It fills the header with
 	 * data and writes it in the file.
 	 */
 	void handleBMPHeader();
 	/**
-	 * Method, that handles the DIP header. It fills the header with
+	 * Handles the DIP header. It fills the header with
 	 * data and writes it in the file.
 	 */
 	void handleDIPHeader();
 	/**
-	 * Method, that handles the BMP pixel array. It saves the pixels
+	 * Handles the BMP pixel array. It saves the pixels
 	 * in the proper order, handles interlacing and
 	 * transparency.
 	 */
 	void handlePixelArray();
-
 	/**
-	 * Method returns the size of the generated BMP file (the value
+	 * Gets the size of the generated BMP file (the value
 	 * is calculated in the header).
 	 * @return size of the BMP file.
 	 */
 	uint64_t getBMPSize();
 
 private:
-	/**
-	 * Pointer to the opened BMP file.
-	 */
+	// pointer to the opened BMP file
 	FILE* m_file;
-
-	/**
-	 * Parsed GIF image data.
-	 */
+	// parsed GIF image data
 	GIFFormat* m_gifFormat;
-	/**
-	 * Header of the BMP file.
-	 */
+	// header of the BMP file
 	BMPHeader m_bmpHeader;
-	/**
-	 * DIP header of the BMP file.
-	 */
+	// DIP header of the BMP file
 	DIPHeader m_dipHeader;
-
-	/**
-	 * Mostly unsued value for additional padding.
-	 */
+	// mostly unused value for additional padding
 	size_t m_paddingSize;
-	/**
-	 * If there ever was any need for padding, its value.
-	 */
+	// padding value (if needed)
 	uint8_t m_paddingValue;
 };
 
@@ -615,7 +521,7 @@ private:
  * The entry point of the conversion library.
  * @param gif2bmp Statistics of the conversion.
  * @param inputFile Pointer to the input file.
- * @param outputFile Pointer to the ouput file.
- * @return the result of the conversion (0 for success, -1 otherwise)
+ * @param outputFile Pointer to the output file.
+ * @return the result of the conversion (0 for success, -1 otherwise).
  */
 int gif2bmp(tGIF2BMP *gif2bmp, FILE* inputFile, FILE* outputFile);

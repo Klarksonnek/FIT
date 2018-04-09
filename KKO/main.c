@@ -16,17 +16,18 @@ struct Params {
 	string inputFile;
 	string outputFile;
 	string logFile;
+	bool help = false;
 };
 
 void printHelp()
 {
 	const string helpMsg =
-			"Conversion of GIF image to BMP image\n "
-	"Parameters:\n"
-	"-h  prints help message\n"
-	"-i  <file> input file name\n"
- 	"-o  <file> output file name\n"
-	"-l  <file> log file name with input GIF size and output BMP size";
+		"Conversion of GIF image to BMP image\n"
+		"Parameters:\n"
+		"-h  prints help message\n"
+		"-i  <file> input file name\n"
+ 		"-o  <file> output file name\n"
+		"-l  <file> log file name with input GIF size and output BMP size";
 
 	cout << helpMsg << endl;
 }
@@ -47,7 +48,7 @@ int getParams(int argc, char *argv[], Params *params)
 				params->logFile = optarg;
 				break;
 			case 'h':
-				printHelp();
+				params->help = true;
 				break;
 			case ':':
 				return -1;
@@ -64,6 +65,11 @@ int main(int argc, char *argv[])
 	Params params;
 
 	int result = getParams(argc, argv, &params);
+	if (params.help) {
+		printHelp();
+		return EXIT_SUCCESS;
+	}
+
 	switch (result) {
 		case -1:
 			cerr << "missing argument" << endl;
