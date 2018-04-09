@@ -379,10 +379,10 @@ void GIFFormat::decodeImageData()
 	// number of bits used (initially and currently)
 	m_codeTable.setInitialCodeSize(initialCodeSize);
 
-    // read the size of the following block (first block)
-    fread(&blockSize,sizeof(uint8_t), 1, m_file);
+	// read the size of the following block (first block)
+	fread(&blockSize,sizeof(uint8_t), 1, m_file);
 
-    loadDataBits(blockSize,&bitsAll);
+	loadDataBits(blockSize,&bitsAll);
 
 	// until all bits are parsed, keep loading additional codes
 	while (!bitsAll.empty())
@@ -558,31 +558,31 @@ void GIFFormat::handleEmptyGraphicsControlExtension()
 void GIFFormat::loadDataBits(uint8_t blockSize, string* dataBits)
 {
 
-    // until data is available
-    while (blockSize != 0x00) {
-        string bits;
+	// until data is available
+	while (blockSize != 0x00) {
+		string bits;
 
-        // for block saving
-        vector<uint8_t> data;
-        uint8_t value;
+		// for block saving
+		vector<uint8_t> data;
+		uint8_t value;
 
-        for (uint8_t i = 0; i < blockSize; i++) {
-            fread(&value, sizeof(uint8_t), 1, m_file);
-            data.push_back(value);
-        }
+		for (uint8_t i = 0; i < blockSize; i++) {
+			fread(&value, sizeof(uint8_t), 1, m_file);
+			data.push_back(value);
+		}
 
-        // uint8_t to binary string conversion and creating of one string
-        for (int i = blockSize - 1; i >= 0; i--) {
-            bitset<8> set(data[i]);
-            bits.append(set.to_string());
-        }
+		// uint8_t to binary string conversion and creating of one string
+		for (int i = blockSize - 1; i >= 0; i--) {
+			bitset<8> set(data[i]);
+			bits.append(set.to_string());
+		}
 
-        // create final string from created strings
-        dataBits->insert(dataBits->begin(), bits.begin(), bits.end());
+		// create final string from created strings
+		dataBits->insert(dataBits->begin(), bits.begin(), bits.end());
 
-        // read the size of the following block
-        fread(&blockSize, sizeof(uint8_t), 1, m_file);
-    }
+		// read the size of the following block
+		fread(&blockSize, sizeof(uint8_t), 1, m_file);
+	}
 
 }
 
