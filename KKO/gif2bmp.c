@@ -1,8 +1,9 @@
 /**
+ * File: gif2bmp.c
  * Author: Bc. Klara Necasova
  * Login: xnecas24
  * Date: 16. 2. 2018
- * Description: Library for GIF to BMP conversion
+ * Description: Methods for GIF to BMP conversion
  */
 
 #include "gif2bmp.h"

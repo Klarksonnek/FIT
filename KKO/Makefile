@@ -1,3 +1,9 @@
+# File: Makefile
+# Author: Bc. Klara Necasova
+# Login: xnecas24
+# Date: 16. 2. 2018
+# Description: Project compilation
+
 CC=g++                     # C++ compiler
 FLAGS= -Wall -pedantic -g  # compiler parameters
 COMPILE = $(CC) $(FLAGS)

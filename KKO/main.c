@@ -1,8 +1,9 @@
 /**
+ * File: main.c
  * Author: Bc. Klara Necasova
  * Login: xnecas24
  * Date: 16. 2. 2018
- * Description: Library for GIF to BMP conversion
+ * Description: Parameter parsing and GIF to BMP conversion using gif2bmp() method
  */
 
 #include <iostream>
