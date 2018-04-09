@@ -284,11 +284,6 @@ void GIFFormat::loadImage()
 	decodeImageData();
 }
 
-/*GIFFormat *GIFFormat::getImageData()
-{
-	return &m_image;
-}*/
-
 int64_t GIFFormat::getFileSize() {
 
 	int64_t size = 0;
@@ -557,7 +552,6 @@ void GIFFormat::handleEmptyGraphicsControlExtension()
 
 void GIFFormat::loadDataBits(uint8_t blockSize, string* dataBits)
 {
-
 	// until data is available
 	while (blockSize != 0x00) {
 		string bits;
@@ -583,7 +577,6 @@ void GIFFormat::loadDataBits(uint8_t blockSize, string* dataBits)
 		// read the size of the following block
 		fread(&blockSize, sizeof(uint8_t), 1, m_file);
 	}
-
 }
 
 void CodeTable::addRowToCodeTable(vector<uint32_t> row)

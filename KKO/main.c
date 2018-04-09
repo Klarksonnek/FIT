@@ -16,7 +16,7 @@ struct Params {
 	string inputFile;
 	string outputFile;
 	string logFile;
-}params;
+};
 
 void printHelp()
 {
@@ -61,6 +61,8 @@ int getParams(int argc, char *argv[], Params *params)
 
 int main(int argc, char *argv[])
 {
+	Params params;
+
 	int result = getParams(argc, argv, &params);
 	switch (result) {
 		case -1:
@@ -95,7 +97,7 @@ int main(int argc, char *argv[])
 		return -4;
 	}
 
-	tGIF2BMP gifData = {0,0};
+	tGIF2BMP gifData = {0, 0};
 	int conversion = gif2bmp(&gifData, inputFile, outputFile);
 
 	if (!params.logFile.empty() && conversion == 0) {
@@ -114,5 +116,5 @@ int main(int argc, char *argv[])
 		}
 	}
 
-	return 0;
+	return EXIT_SUCCESS;
 }
