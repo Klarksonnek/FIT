@@ -50,9 +50,10 @@ typedef struct
 } tGIF2BMP;
 
 /**
- * structure, that defines the content of the Graphics control extension. Size of the members is equal to the size
- * read from the input file.
- * http://giflib.sourceforge.net/whatsinagif/bits_and_bytes.html
+ * structure, that defines the content of the Graphics control extension.
+ * Size of the members is equal to the size read from the input file.
+ *
+ * @see http://giflib.sourceforge.net/whatsinagif/bits_and_bytes.html
  */
 struct __attribute__ ((packed)) GraphicsControlExtension
 {
@@ -67,9 +68,10 @@ struct __attribute__ ((packed)) GraphicsControlExtension
 };
 
 /**
- * structure, that defines the content of the Image descriptor. Size of the members is equal to the size
- * read from the input file.
- * http://giflib.sourceforge.net/whatsinagif/bits_and_bytes.html
+ * structure, that defines the content of the Image descriptor. Size
+ * of the members is equal to the size read from the input file.
+ *
+ * @see http://giflib.sourceforge.net/whatsinagif/bits_and_bytes.html
  */
 struct __attribute__ ((packed)) ImageDescriptor
 {
@@ -85,8 +87,8 @@ struct __attribute__ ((packed)) ImageDescriptor
 };
 
 /**
- * structure, that defines the content of the Logical screen descriptor. Size of the members is equal to the size
- * read from the input file.
+ * structure, that defines the content of the Logical screen descriptor.
+ * Size of the members is equal to the size read from the input file.
  * http://giflib.sourceforge.net/whatsinagif/bits_and_bytes.html
  */
 struct __attribute__ ((packed)) LogicalScreenDescriptor
@@ -224,7 +226,8 @@ private:
 };
 
 /**
- * Class for representing and manipulating the content of the dictionary/code table.
+ * Class for representing and manipulating the content of the
+ * dictionary/code table.
  */
 class CodeTable
 {
@@ -238,7 +241,8 @@ public:
 	 */
 	void addRowToCodeTable(std::vector<uint32_t>);
 	/**
-	 * Method that obtains the first index of the selected code from the code table.
+	 * Method that obtains the first index of the selected code from
+	 * the code table.
 	 * @return First index of the selected code.
 	 */
 	uint32_t firstIndexOfCode(uint32_t);
@@ -301,8 +305,8 @@ public:
 	 */
 	void setPreviousCode(uint32_t);
 
-	/*
-	 *  Method gets previous code.
+	/**
+	 * Method gets previous code.
 	 */
 	uint32_t previousCode();
 
@@ -368,12 +372,14 @@ public:
 	void loadLogicalScreenDescriptor();
 
 	/**
-	 * Method gets the global color table flag. If the global color table is present, we can load it.
+	 * Method gets the global color table flag. If the global color
+	 * table is present, we can load it.
 	 * @return
 	 */
 	bool getGlobalColorTableFlag();
 	/**
-	 * Method gets the size of the global color table based on the loaded color depth.
+	 * Method gets the size of the global color table based on the
+	 * loaded color depth.
 	 * @return
 	 */
 	uint8_t getSizeOfGlobalColorTable();
@@ -383,7 +389,8 @@ public:
 	void createGlobalColorTable();
 
 	/**
-	 * This method handles the loading of the remaining blocks, that comprise the GIF file.
+	 * This method handles the loading of the remaining blocks,
+	 * that comprise the GIF file.
 	 */
 	void loadBlocks();
 
@@ -396,7 +403,8 @@ public:
 	// image methods
 
 	/**
-	 * Method handles the image blocks (image desriptor, local color table and image data)
+	 * Method handles the image blocks (image desriptor, local color
+	 * table and image data)
 	 */
 	void loadImage();
 
@@ -406,13 +414,15 @@ public:
 	void loadImageDescriptor();
 
 	/**
-	 * Auxillary method, that prints the content of the image descriptor to the stdout.
+	 * Auxillary method, that prints the content of the image descriptor
+	 * to the stdout.
 	 */
 	void printImageDescriptor();
 
 	/**
-	 * Method, that gets the value of the local color table flag. If the flag is set to true, the local color table
-	 * is present and needs to be loaded and used for the image.
+	 * Method, that gets the value of the local color table flag. If the
+	 * flag is set to true, the local color table is present and needs
+	 * to be loaded and used for the image.
 	 */
 	bool getLocalColorTableFlag();
 
@@ -431,7 +441,8 @@ public:
 	void handleEmptyGraphicsControlExtension();
 
 	/**
-	* Auxillary method, that prints the content of the graphics control extension to the stdout.
+	* Auxillary method, that prints the content of the graphics control
+	 * extension to the stdout.
 	*/
 	void printGraphicsControlExtension();
 
@@ -441,9 +452,11 @@ public:
 	void decodeImageData();
 
 	/**
-	 * Method loads the data from the input file and stores them as bits that will be decoded.
+	 * Method loads the data from the input file and stores them as bits
+	 * that will be decoded.
 	 * @param blockSize initial block size
-	 * @param dataBits string with bits, that will be filled (entire bit stream at the end)
+	 * @param dataBits string with bits, that will be filled (entire bit
+	 * stream at the end)
 	 */
 	void loadDataBits(uint8_t blockSize, std::string* dataBits);
 
@@ -534,31 +547,37 @@ class BMPFormat
 {
 public:
 	/**
-	 * The constructor, that uses the parsed GIF file and the pointer to the opened BMP file (for writing).
+	 * The constructor, that uses the parsed GIF file and the pointer
+	 * to the opened BMP file (for writing).
 	 */
 	BMPFormat(GIFFormat*, FILE*);
 
 	/**
-	 * Method, that sets the required padding (mostly unused, due to the transparency).
+	 * Method, that sets the required padding (mostly unused, due to
+	 * the transparency).
 	 */
 	void setPadding();
 
 	/**
-	 * Method, that handles the BMP header. It fills the header with data and writes it in the file.
+	 * Method, that handles the BMP header. It fills the header with
+	 * data and writes it in the file.
 	 */
 	void handleBMPHeader();
 	/**
-	 * Method, that handles the DIP header. It fills the header with data and writes it in the file.
+	 * Method, that handles the DIP header. It fills the header with
+	 * data and writes it in the file.
 	 */
 	void handleDIPHeader();
 	/**
-	 * Method, that handles the BMP pixel array. It saves the pixels in the proper order, handles interlacing and
+	 * Method, that handles the BMP pixel array. It saves the pixels
+	 * in the proper order, handles interlacing and
 	 * transparency.
 	 */
 	void handlePixelArray();
 
 	/**
-	 * Method returns the size of the generated BMP file (the value is calculated in the header).
+	 * Method returns the size of the generated BMP file (the value
+	 * is calculated in the header).
 	 * @return size of the BMP file.
 	 */
 	uint64_t getBMPSize();
