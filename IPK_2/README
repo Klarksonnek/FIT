@@ -1,0 +1,88 @@
+Předmět: IPK (Počítačové komunikace a sítě)
+Projekt: Přenos souborů
+Datum: duben 2016 
+Jméno a příjmení: Klára Nečasová 
+Email: xnecas24@stud.fit.vutbr.cz
+
+INFORMACE O PROGRAMU:
+=====================
+-- jedná se o aplikaci klient/server, je využito rozhraní schránek (sockets API) 
+-- server je konkurentní (umožňuje obsluhovat více klientů najednou)
+-- programy využívají spojovanou službu TCP  
+
+SERVER:
+-- naslouchá na daném portu 
+-- přijímá požadavky od klientů
+--> Typy požadavků: 
+	-- UPLOAD: požadavek klienta pro nahrání souboru na server 
+	-- DOWNLOAD: požadavek klienta pro stažení souboru ze serveru 
+	
+KLIENT:
+-- odesílá požadavky na server (požadavky UPLOAD/DOWNLOAD)
+
+PŘEKLAD: 
+=====================
+-- Překlad: pomocí příkazu "make" v hlavní složce 
+
+POUŽITÍ: 
+=====================
+-- Server: ./server -p port &
+-- Klient: ./client -h hostname -p port [-d|u] fileName
+
+--> Parametry:
+	hostname 	= IP adresa, nebo DNS jméno serveru
+	port 		= číslo portu, na kterém server naslouchá
+	-d 			= požadavek na stažení souboru s názvem fileName ze serveru
+	-u 			= požadavek na nahrání souboru s názvem fileName na server
+	fileName 	= název souboru
+
+POPIS ČINNOSTI:
+=====================
+Zpracování požadavku UPLOAD:
+---------------------
+1) klient zasílá požadavek na server, který obsahuje
+jméno nahrávaného souboru následované velikostí souboru 
+2) server požadavek zpracuje a odešle zprávu klientovi, zda
+je možné zahájit nahrávání souboru 
+3a) v případě kladné odpovědi klient soubor otevře,
+načte jeho obsah do paměti, následně soubor uzavře 
+a poté posílá klient soubor na server 
+4) po úspěšném nahrání souboru odesílá server potvrzující 
+zprávu klientovi 
+3b) v případě záporné odpovědi vypíše klient chybové hlášení
+a spojení se ukončí  
+
+Zpracování požadavku DOWNLOAD:
+---------------------
+1) klient zasílá požadavek na server, který obsahuje
+jméno souboru ke stažení
+2a) server zpracuje požadavek klienta, ověří existenci stahovaného
+souboru a přístupová práva k němu, odesílá zpět potvrzující zprávu, 
+zda je možné daný soubor stáhnout, zpráva také obsahuje informaci
+o velikosti stahovaného souboru 
+2b) v případě, že není možné daný soubor stáhnout, odesílá server 
+zápornou odpověď, klient vypíše chybové hlášení a spojení se ukončí  
+3) klient přijme potvrzující zprávu od serveru a odesílá na server zprávu,
+že je připraven přijmout daný soubor 
+4) server opět zpracuje zprávu od klienta a odešle zpět požadovaný
+soubor   
+
+OŠETŘENÍ CHYBOVÝCH STAVŮ A DALŠÍ OMEZENÍ:
+=====================
+-- klient i server ošetřují nesprávné zadání argumentů 
+příkazové řádky, jejich duplicitu a nevalidní hodnoty 
+(neplatné číslo portu, chybně zadaný hostname, 
+nepodporovaný typ požadavku, atp.)
+-- dále se ošetřuje práce se soubory a komunikace mezi klientem a serverem
+-- server a klient mohou být spuštěny ve stejném adresáři 
+TODO: jen jeden klient? 
+ 
+		
+POZNÁMKY:
+=====================
+-- popis aplikačního protokolu je v souboru IPK_xnecas24.pdf
+-- demonstraci činnosti programu je možné provést pomocí dávkového souboru test.sh,
+který umožňuje testovat správnost zadaných argumentů a kontrolu komunikace
+mezi serverem a klientem pro oba typy požadavků 
+TODO: test.sh --> vytvořit fce na ověření návratových kodů? 
+
