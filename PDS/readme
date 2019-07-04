@@ -1,0 +1,30 @@
+Autor: Klára Nečasová
+Login: xnecas24
+Projekt: DHCP útoky
+
+Odevzdané soubory:
+- ClientMessage.cpp, ClientMessage.h - specifické zprávy pro klienta
+- Common.cpp, Common.h - společné zprávy pro klienta i server
+- Makefile - překlad projektu
+- ServerMessage.cpp, ServerMessage.h - specifické zprávy pro server
+- Util.cpp, Util.h - pomocné metody
+- pds-dhcprogue.cpp - útok Rogue DHCP Server
+- pds-dhcpstarve.cpp - útok DHCP Starvation
+- dokumentace.pdf - dokumentace k projektu
+
+Překlad a spuštění:
+- make - překlad programu a vytvoření spustitelných souborů pds-dhcpstarve a pds-dhcprogue
+- ./pds-dhcpstarve -i interface - spuštění DHCP Starvation útoku
+- ./pds-dhcprogue -i interface -p pool -g gateway -n dns-server -d domain -l lease-time - spuštění Rogue DHCP Server útoku
+
+Programy nevypisují žádné inforamce na standardní výstup (stdout). Pokud se vyskytnou nějaké chybové zprávy, tak se vypíšou na standardní 
+chybový výstup (stderr).
+
+Omezení:
+- na linkové vrstvě je posílána MAC adresa rozhraní, namísto podvržené adresy
+- zdrojová IP adresa klienta odpovídá adrese rozhraní, nikoli adrese 0.0.0.0
+- DHCP Starvation útok
+-- po ukončení aplikace nenastane uvolnění adres
+-- útok na rozsáhlou síť může v případě DHCP REQUEST útoku trvat delší dobu, protože se postupně čeká na jednotlivé DHCP zprávy
+- Rogue DHCP Server útok
+-- doba výpůjčky IP adresy není kontrolována
