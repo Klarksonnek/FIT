@@ -1,0 +1,49 @@
+Project: simplify-bkg, 2017/2018
+Author: Klara Necasova (xnecas24)
+Email: xnecas24@stud.fit.vutbr.cz
+
+Description
+===============
+Application removes useless symbols of context-free grammar (CFG) using 
+an algorithm 4.3 introduced in TIN.
+The first step of algorithm 4.3 (algorithm 4.1) removes all nonterminal symbols, 
+which cannot generate any terminal string. 
+The second step of algorithm 4.3 (algorithm 4.2) eliminates all unreachable symbols. 
+The order of using the algorithms is important, otherwise, the resulting grammar can 
+be incorrect. 
+
+Usage
+===============
+The compilation of application:
+make - builds the application 
+make pack - creates the ZIP archive containing all project files
+
+The application can be run using following options:
+./simplify-bkg (-i|-1|-2) [filename] 
+    filename - input file with CFG in the specific format
+             - if the filename is not specified, the application reads from stdin
+	-i loads and prints out the CFG (internal representation)
+	-1 prints out the CFG after the first step of algorithm 4.3 (algorithm 4.1)  
+	-2 prints out the CFG after the second step of algorithm 4.3 (algorithm 4.2)
+  
+Testing
+===============
+The application was tested using a set of tests placed in subfolder "dir_in". 
+Reference outputs are placed in subfolder "dir_ref". Testing script called "it_is_ok.sh" 
+can be found in main folder.
+
+The set of tests is composed of:
+- tests for argument check
+- tests for detection of invalid grammar
+- tests for check of option -i, -1, -2   
+
+Executing tests:
+To execute a set of tests, it is necessary to create the ZIP archive containing all project files
+and run testing script with a login. Detailed description of tests is in file "readme-tests.md"
+placed in main folder.
+
+make pack
+./it_is_ok.sh xnecas24
+
+The set of tests and the testing script were developed in collaboration with Peter Tisovčík (xtisov00).
+My contribution in testing can be found in file "readme-tests.md" placed in main folder. 
