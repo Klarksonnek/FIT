@@ -1,3 +1,6 @@
 [submodule "FLP_1/vut_fit_MIT_FLP1_simplify-bkg-tests"]
 	path = FLP_1/vut_fit_MIT_FLP1_simplify-bkg-tests
 	url = git@github.com:mienkofax/vut_fit_MIT_FLP1_simplify-bkg-tests.git
+[submodule "PIS/vut_fit_MIT_PIS"]
+	path = PIS/vut_fit_MIT_PIS
+	url = https://github.com/mienkofax/vut_fit_MIT_PIS
