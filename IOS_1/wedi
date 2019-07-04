@@ -1,0 +1,284 @@
+#!/bin/sh
+
+# Projekt: 	IOS - Projekt 1 
+# Autor: 		Klara Necasova
+# Email: 		xnecas24@stud.fit.vutbr.cz
+# Datum: 		Brezen 2015  
+
+export LC_ALL=C
+
+# parametry skriptu
+M_PARAM=0
+L_PARAM=0
+A_PARAM=0
+B_PARAM=0
+NO_PARAM=0
+FILE_PARAM=0
+DIR_PARAM=0
+
+# pomocne promenne 
+fullPath=""
+params=0
+  
+# osetreni nastaveni aspon jedne z promennych EDITOR, VISUAL
+if [ -z "$EDITOR" ] && [ -z "$VISUAL" ]; then
+   echo "Neni nastavena ani promenna EDITOR ani VISUAL!" >&2
+   exit 1
+fi
+
+# pokud neni nastavena promenna EDITOR a je nastavena promenna VISUAL,
+# pouzijeme promennou EDITOR
+if [ -z "$EDITOR" ] && [ ! -z "$VISUAL" ]; then
+   EDITOR=$VISUAL
+fi
+
+# osetreni existence promenne WEDI_RC
+if [ -z "$WEDI_RC" ]; then
+	echo "Promenna WEDI_RC neexistuje." >&2
+	exit 1
+fi
+
+# pokud neexistuje soubor dany promennou WEDI_RC, bude vytvoren
+if [ ! -f "$WEDI_RC" ]; then
+	touch "$WEDI_RC" 2>/dev/null
+	if [ "$?" -ne "0" ]; then
+		 echo "Soubor se nepodarilo vytvorit." >$2
+		 exit 1
+	fi
+fi
+
+# Zapise do souboru daneho promennou WEDI_RC
+# $1 - cesta k editovanemu souboru
+writeToLog()
+{
+    actualDate=`date +%Y-%m-%d`
+    fullPath=`readlink -f -- "$1"`
+    echo $actualDate:$fullPath >> "$WEDI_RC"
+}
+
+# Vypise soubory z daneho adresare
+# $1 - adresar
+listFiles()
+{
+   while read -r line
+    do
+        fileLine=`echo "$line" | grep -- "${1%/}\/[^\/]*$" | cut -d":" -f 2-` 
+        if [ -f "$fileLine" ]  ; then
+            echo "$fileLine" | rev | cut -f1 -d"/" | rev
+        fi
+    done < "$WEDI_RC" | sort -u
+}
+
+# Spusti editor, ktery je dany promennymi prostredi EDITOR, VISUAL 
+# $1 - soubor k otevreni
+startEditor()
+{
+	 if [ -z "$1" ] || [ ! -f "$1" ]; then
+		 echo "V danem adresari nebyly editovany zadne soubory." >&2 
+		 exit 1
+	 fi
+
+	 writeToLog "$1"
+   $EDITOR -- "$1"
+   exit "$?"
+}
+
+# Zjisti, zda existuje zadany adresar
+# $1 - adresar k overeni 
+isDir()
+{
+    if [ ! -d "$1" ]; then
+	    echo "Zadany adresar neexistuje." >&2
+	    exit 1
+		fi
+}
+
+# Overi, zda je datum ve spravnem formatu
+# $1 - datum k overeni
+isDate()
+{   
+   dateValid=`echo "$1" | grep '^[0-9][0-9][0-9][0-9]-[0-1][0-9]-[0-3][0-9]$'`
+   if [ "$1" != "$dateValid" ] ;  then
+        echo "Chybny format data." >&2
+        exit 1
+   fi
+}
+
+# Zjisti nejcasteji editovany soubor v danem adresari 
+# $1 - cesta k adresari 
+mostEdited()
+{
+    filePath="$(while read -r line 
+    do
+        fileLine=`echo "$line" | grep -- "${1%/}\/[^\/]*$" | cut -d":" -f 2-`
+        if [ -f "$fileLine" ] ; then
+            echo "$fileLine"  
+        fi 
+    done < "$WEDI_RC" | sort | uniq -c | sort -k1n | tail -1 | rev | cut -f1 -d"/" | rev)"
+
+    if [ -z "$1/$filePath" ] ; then 
+        echo "V danem adresari nebyly editovane zadne soubory." >&2
+        exit 1
+    fi
+	  startEditor "$1/$filePath"
+}
+
+# Zjisti posledni editovany soubor v danem adresari 
+# $1 - cesta k adresari 
+lastEdited()
+{
+    fullPath="`readlink -f -- $1`"
+	  filePath="$(while read -r line 
+    do
+        fileLine=`echo "$line" | grep -- "${fullPath%/}\/[^\/]*$" | cut -d":" -f 2-`
+        if [ -f "$fileLine" ] ; then
+            echo "$fileLine"  
+        fi 
+    done < "$WEDI_RC" | tail -1)"
+
+    if [ -z "$filePath" ] ; then 
+        echo "V danem adresari nebyly editovane zadne soubory." >&2
+        exit 1
+    fi
+	  startEditor "$filePath"
+}
+
+# Vypise soubory, ktere byly editovany pred zadanym datem (vcetne)
+# $1 - datum 
+# $2 - cesta k adresari
+beforeDate()
+{
+    isDir "$2"
+    isDate "$1"
+
+    while read -r line 
+    do
+        date="`echo "$line" | grep -o "^[^\:]*" | tr -d '-'`"
+        date2="`echo $1 | tr -d '-'`"
+        if [ "$date" -le "$date2" ] ; then
+            file="`echo $line |grep -o "${2}\/[^\/]*$"`"
+            if [ -f "$file" ] ; then 
+                echo "$file"
+            fi
+        fi
+    done < "$WEDI_RC" | sort -u | grep -o "[^\/]*$"
+}
+
+# Vypise soubory, ktere byly editovany po zadanem datu (vcetne)
+# $1 - datum 
+# $2 - cesta k adresari                                                                                                 
+afterDate()
+{
+    isDir "$2"
+    isDate "$1"
+
+    while read -r line 
+    do
+        date="`echo "$line" | grep -o "^[^\:]*" | tr -d '-'`"
+        date2="`echo $1 | tr -d '-'`"
+        if [ "$date" -ge "$date2" ] ; then
+            file="`echo $line |grep -o "${2}\/[^\/]*$"`"
+            if [ -f "$file" ] ; then 
+                echo "$file"
+            fi
+        fi
+    done < "$WEDI_RC" | sort -u | grep -o "[^\/]*$"               
+}
+
+# Zpracuje parametry prikazove radky
+while getopts :mm:ll::a:b: option
+do
+if [ $params -eq 1 ]; then
+	echo "Chybne parametry prikazoveho radku." >&2 
+	exit 1 
+fi
+case "$option" in
+m) M_PARAM=1
+   params=1
+   ;;
+l) L_PARAM=1
+   params=1
+   ;;
+a) A_PARAM=1
+   params=1
+   ;;
+b) B_PARAM=1
+   params=1
+   ;;
+*) echo "Chybne parametry prikazoveho radku." >&2 
+   exit 1 ;; 
+esac
+done
+
+# wedi
+if [ $# -eq 0 ] && [ $params -eq 0 ]; then
+	lastEdited "."
+fi
+# wedi FILE/DIR
+if [ $# -eq 1 ] && [ $params -eq 0 ]; then
+	if [ -f "$1" ]; then
+		startEditor "$1"
+	elif [ -d "$1" ]; then
+		lastEdited "$1"
+	else
+		echo "Nebyl zadan existujici soubor ani adresar."
+		exit 1
+	fi
+fi
+# wedi -m [DIR]
+if [ $M_PARAM -eq 1 ]; then
+	if [ $# -eq 1 ]; then
+		fullPWD=`readlink -f -- .`
+		mostEdited "$fullPWD"
+	elif [ $# -eq 2 ]; then
+		fullPath="`readlink -f -- "$2"`"
+		isDir "$fullPath"
+		mostEdited "$fullPath"
+	else
+		echo "Chybne parametry prikazoveho radku." >&2 
+		exit 1 
+	fi
+# wedi -l [DIR]
+elif [ $L_PARAM -eq 1 ]; then
+	if [ $# -eq 1 ]; then
+		fullPWD=`readlink -f -- .`
+		listFiles "$fullPWD"
+	elif [ $# -eq 2 ]; then
+		fullPath="`readlink -f -- "$2"`"
+		isDir "$fullPath"
+		listFiles "$fullPath"
+	else
+		echo "Chybne parametry prikazoveho radku." >&2
+		exit 1  
+	fi
+# wedi -a DATE [DIR]
+elif [ $A_PARAM -eq 1 ]; then
+	if [ $# -eq 2 ]; then
+		fullPWD=`readlink -f -- .`
+		afterDate "$2" "$fullPWD"
+	elif [ $# -eq 3 ]; then
+		fullPath="`readlink -f -- "$3"`"
+		afterDate "$2" "$fullPath"
+	else
+		echo "Chybne parametry prikazoveho radku." >&2
+		exit 1 
+	fi
+# wedi -b DATE [DIR]
+elif [ $B_PARAM -eq 1 ]; then
+	if [ $# -eq 2 ]; then
+		fullPWD=`readlink -f -- .`
+		beforeDate "$2" "$fullPWD"
+	elif [ $# -eq 3 ]; then
+		fullPath="`readlink -f -- "$3"`"
+		beforeDate "$2" "$fullPath"
+	else
+		echo "Chybne parametry prikazoveho radku." >&2
+		exit 1 
+	fi
+fi
+
+# Osetreni parametru prikazoveho radku
+if [ $# -ge 2 ] && [ $params -eq 0 ]; then
+	echo "Chybne parametry prikazoveho radku." >&2	
+	exit 1 
+fi
