@@ -1,0 +1,783 @@
+Archive member included because of file (symbol)
+
+../../..//mcu/libfitkit/build\libfitkit_f2xx.a(fitkitlib_f2xx.o)
+                              build/mcu/main_f2xx.o (initialize_hardware)
+../../..//mcu/libfitkit/build\libfitkit_f2xx.a(flash_f2xx.o)
+                              ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(fitkitlib_f2xx.o) (flash_init)
+../../..//mcu/libfitkit/build\libfitkit_f2xx.a(flash_fpga_f2xx.o)
+                              ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(fitkitlib_f2xx.o) (FPGAConfig_init)
+../../..//mcu/libfitkit/build\libfitkit_f2xx.a(fpga_f2xx.o)
+                              ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(fitkitlib_f2xx.o) (FPGA_init)
+../../..//mcu/libfitkit/build\libfitkit_f2xx.a(globfun_f2xx.o)
+                              ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(flash_f2xx.o) (long2str)
+../../..//mcu/libfitkit/build\libfitkit_f2xx.a(spi_f2xx.o)
+                              ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(fitkitlib_f2xx.o) (SPI_Init)
+../../..//mcu/libfitkit/build\libfitkit_f2xx.a(terminal_f2xx.o)
+                              ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(fitkitlib_f2xx.o) (terminal_init)
+../../..//mcu/libfitkit/build\libfitkit_f2xx.a(timer_b_f2xx.o)
+                              ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(fitkitlib_f2xx.o) (timerb_init)
+../../..//mcu/libfitkit/build\libfitkit_f2xx.a(uart_f2xx.o)
+                              ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(terminal_f2xx.o) (serial_init)
+../../..//mcu/libfitkit/build\libfitkit_f2xx.a(filetransfer_f2xx.o)
+                              ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(fitkitlib_f2xx.o) (SPI_WriteFile)
+../../..//mcu/libfitkit/build\libfitkit_f2xx.a(cmd_f2xx.o)
+                              ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(terminal_f2xx.o) (term_cmd_clear)
+c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\libgcc.a(__stop_progExec__.o)
+                              build/mcu/main_f2xx.o (__stop_progExec__)
+c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\libgcc.a(_mulsi3hw.o)
+                              ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(flash_f2xx.o) (__umulsi3hw)
+c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\libgcc.a(_udivmodsi4.o)
+                              ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(flash_f2xx.o) (__udivmodsi4)
+c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\libgcc.a(_divmodsi4.o)
+                              ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(flash_f2xx.o) (__divmodsi4)
+c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\libgcc.a(_reset_vector__.o)
+                              c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\..\..\..\..\msp430\lib\crt430x2617.o (_reset_vector__)
+c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\libgcc.a(__low_level_init.o)
+                              c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\libgcc.a(_reset_vector__.o) (__low_level_init)
+c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\libgcc.a(_copy_data.o)
+                              c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\libgcc.a(_reset_vector__.o) (__do_copy_data)
+c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\libgcc.a(_clear_bss.o)
+                              c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\libgcc.a(_reset_vector__.o) (__do_clear_bss)
+c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\libgcc.a(__jump_to_main.o)
+                              c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\libgcc.a(_reset_vector__.o) (__jump_to_main)
+c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\..\..\..\..\msp430\lib\libc.a(strncpy.o)
+                              build/mcu/tasks_f2xx.o (strncpy)
+c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\..\..\..\..\msp430\lib\libc.a(isdigit.o)
+                              ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(globfun_f2xx.o) (isdigit)
+c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\..\..\..\..\msp430\lib\libc.a(memcpy.o)
+                              build/mcu/queue_f2xx.o (memcpy)
+c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\..\..\..\..\msp430\lib\libc.a(memset.o)
+                              build/mcu/tasks_f2xx.o (memset)
+c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\..\..\..\..\msp430\lib\libc.a(strlen.o)
+                              build/mcu/display_f2xx.o (strlen)
+
+Allocating common symbols
+Common symbol       size              file
+
+BreakFlag           0x1               ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(uart_f2xx.o)
+TransmitNum         0x1               ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(uart_f2xx.o)
+last_ch             0x1               build/mcu/main_f2xx.o
+index_buf           0x1               build/mcu/keyboard_f2xx.o
+Cmd_Old             0x1               ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(terminal_f2xx.o)
+cb_fun              0x2               ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(filetransfer_f2xx.o)
+lcd_shift_addr      0x2               build/mcu/display_f2xx.o
+ReceiveNum          0x2               ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(uart_f2xx.o)
+lcd_cursor_addr     0x2               build/mcu/display_f2xx.o
+cb_buf              0x2               ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(filetransfer_f2xx.o)
+CMD_Long            0x4               ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(cmd_f2xx.o)
+keyboard_buffer     0x14              build/mcu/keyboard_f2xx.o
+CountPage           0x2               ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(flash_f2xx.o)
+ReceiveBuf          0x7f              ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(uart_f2xx.o)
+ReceiveIndexRec     0x2               ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(uart_f2xx.o)
+TransmitBuf         0x64              ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(uart_f2xx.o)
+ErrorFlag           0x1               ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(uart_f2xx.o)
+ReceiveIndex        0x2               ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(uart_f2xx.o)
+TransmitIndexSend   0x1               ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(uart_f2xx.o)
+TypeBufferFlash     0x1               ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(flash_f2xx.o)
+TransmitIndex       0x1               ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(uart_f2xx.o)
+PomRS232            0x1               ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(uart_f2xx.o)
+AdrBufferFlash      0x2               ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(flash_f2xx.o)
+CMDStr              0x19              ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(cmd_f2xx.o)
+Cmd                 0x1               ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(terminal_f2xx.o)
+write_index_buf     0x1               build/mcu/keyboard_f2xx.o
+chars_in_buf        0x1               build/mcu/keyboard_f2xx.o
+CMDStrLen           0x1               ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(cmd_f2xx.o)
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+text             0x00003100         0x0000cec0         xr
+data             0x00001100         0x00002000         xrw
+vectors          0x0000ffc0         0x00000040         rw
+bootloader       0x00000c00         0x00000400         xr
+infomem          0x00001000         0x00000100         xr
+infomemnobits    0x00001000         0x00000100         xr
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+LOAD c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\..\..\..\..\msp430\lib\crt430x2617.o
+LOAD build/mcu/keyboard_f2xx.o
+LOAD build/mcu/display_f2xx.o
+LOAD build/mcu/tasks_f2xx.o
+LOAD build/mcu/list_f2xx.o
+LOAD build/mcu/queue_f2xx.o
+LOAD build/mcu/heap_2_f2xx.o
+LOAD build/mcu/port_f2xx.o
+LOAD build/mcu/main_f2xx.o
+LOAD ../../..//mcu/libfitkit/build\libfitkit_f2xx.a
+LOAD c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\libgcc.a
+LOAD c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\..\..\..\..\msp430\lib\libc.a
+LOAD c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\libgcc.a
+
+.hash
+ *(.hash)
+
+.dynsym
+ *(.dynsym)
+
+.dynstr
+ *(.dynstr)
+
+.gnu.version
+ *(.gnu.version)
+
+.gnu.version_d
+ *(.gnu.version_d)
+
+.gnu.version_r
+ *(.gnu.version_r)
+
+.rel.init
+ *(.rel.init)
+
+.rela.init
+ *(.rela.init)
+
+.rel.text
+ *(.rel.text)
+ *(.rel.text.*)
+ *(.rel.gnu.linkonce.t*)
+
+.rela.text
+ *(.rela.text)
+ *(.rela.text.*)
+ *(.rela.gnu.linkonce.t*)
+
+.rel.fini
+ *(.rel.fini)
+
+.rela.fini
+ *(.rela.fini)
+
+.rel.rodata
+ *(.rel.rodata)
+ *(.rel.rodata.*)
+ *(.rel.gnu.linkonce.r*)
+
+.rela.rodata
+ *(.rela.rodata)
+ *(.rela.rodata.*)
+ *(.rela.gnu.linkonce.r*)
+
+.rel.data
+ *(.rel.data)
+ *(.rel.data.*)
+ *(.rel.gnu.linkonce.d*)
+
+.rela.data
+ *(.rela.data)
+ *(.rela.data.*)
+ *(.rela.gnu.linkonce.d*)
+
+.rel.ctors
+ *(.rel.ctors)
+
+.rela.ctors
+ *(.rela.ctors)
+
+.rel.dtors
+ *(.rel.dtors)
+
+.rela.dtors
+ *(.rela.dtors)
+
+.rel.got
+ *(.rel.got)
+
+.rela.got
+ *(.rela.got)
+
+.rel.bss
+ *(.rel.bss)
+
+.rela.bss
+ *(.rela.bss)
+
+.rel.plt
+ *(.rel.plt)
+
+.rela.plt
+ *(.rela.plt)
+
+.text           0x00003100     0x6cfe
+                0x00003100                . = ALIGN (0x2)
+ *(.init)
+ *(.init)
+ *(.init0)
+ .init0         0x00003100        0x0 c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\libgcc.a(_reset_vector__.o)
+                0x00003100                _reset_vector__
+ *(.init0)
+ *(.init1)
+ *(.init1)
+ *(.init2)
+ *(.init2)
+ *(.init3)
+ .init3         0x00003100        0x6 c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\libgcc.a(__low_level_init.o)
+                0x00003100                __low_level_init
+ *(.init3)
+ *(.init4)
+ .init4         0x00003106       0x12 c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\libgcc.a(_copy_data.o)
+                0x00003106                __do_copy_data
+ .init4         0x00003118       0x10 c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\libgcc.a(_clear_bss.o)
+                0x00003118                __do_clear_bss
+ *(.init4)
+ *(.init5)
+ *(.init5)
+ *(.init6)
+ *(.init6)
+ *(.init7)
+ *(.init7)
+ *(.init8)
+ *(.init8)
+ *(.init9)
+ .init9         0x00003128        0x4 c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\libgcc.a(__jump_to_main.o)
+                0x00003128                __jump_to_main
+ *(.init9)
+                0x0000312c                __ctors_start = .
+ *(.ctors)
+ *(.ctors)
+                0x0000312c                __ctors_end = .
+                0x0000312c                __dtors_start = .
+ *(.dtors)
+ *(.dtors)
+                0x0000312c                __dtors_end = .
+                0x0000312c                . = ALIGN (0x2)
+ *(.text)
+ .text          0x0000312c        0x6 c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\..\..\..\..\msp430\lib\crt430x2617.o
+                0x0000312c                vector_ffc0
+                0x0000312c                vector_ffc8
+                0x0000312c                vector_ffcc
+                0x0000312c                _unexpected_1_
+                0x0000312c                vector_ffe0
+                0x0000312c                vector_ffc4
+                0x0000312c                vector_fff0
+                0x0000312c                vector_ffce
+                0x0000312c                vector_fffc
+                0x0000312c                vector_ffe4
+                0x0000312c                vector_ffd6
+                0x0000312c                vector_ffc2
+                0x0000312c                vector_ffd4
+                0x0000312c                vector_ffc6
+                0x0000312c                vector_ffd2
+                0x0000312c                vector_ffca
+                0x0000312c                vector_ffde
+                0x0000312c                vector_ffe2
+                0x0000312c                vector_ffe8
+                0x00003130                _unexpected_
+                0x0000312c                vector_fffa
+                0x0000312c                vector_fff4
+                0x0000312c                vector_fff8
+                0x0000312c                vector_ffd8
+                0x0000312c                vector_ffe6
+                0x0000312c                vector_ffd0
+                0x0000312c                vector_ffdc
+                0x0000312c                vector_fff6
+                0x0000312c                vector_ffda
+                0x0000312c                vector_ffea
+ .text          0x00003132      0x1aa build/mcu/keyboard_f2xx.o
+                0x00003174                keyboard_handle_interrupt
+                0x000031c2                key_decode
+                0x00003132                keyboard_get_char
+ .text          0x000032dc      0x282 build/mcu/display_f2xx.o
+                0x00003338                LCD_clear
+                0x0000352e                LCD_rotate
+                0x0000336a                LCD_init
+                0x000034a8                LCD_write_string
+                0x000033b4                LCD_load_char
+                0x00003396                LCD_char2dis
+                0x00003424                LCD_append_char
+                0x000034cc                LCD_append_string
+                0x000032dc                LCD_send_cmd
+ .text          0x0000355e      0x8b8 build/mcu/tasks_f2xx.o
+                0x0000378c                vTaskEndScheduler
+                0x00003a88                vTaskPlaceOnEventList
+                0x000038c4                xTaskGetTickCount
+                0x00003b06                xTaskRemoveFromEventList
+                0x00003bf6                xTaskCheckForTimeOut
+                0x000037a0                vTaskSuspendAll
+                0x000039f0                vTaskSwitchContext
+                0x000038f2                uxTaskGetNumberOfTasks
+                0x00003920                vTaskIncrementTick
+                0x000037c2                xTaskResumeAll
+                0x00003746                vTaskStartScheduler
+                0x00003c86                vTaskMissedYield
+                0x0000355e                xTaskCreate
+                0x000036b8                vTaskDelay
+                0x00003bcc                vTaskSetTimeOutState
+ .text          0x00003e16      0x1d0 build/mcu/list_f2xx.o
+                0x00003e7a                vListInsertEnd
+                0x00003f84                vListRemove
+                0x00003e5a                vListInitialiseItem
+                0x00003e16                vListInitialise
+                0x00003eec                vListInsert
+ .text          0x00003fe6      0x860 build/mcu/queue_f2xx.o
+                0x00004262                xQueueGenericSendFromISR
+                0x00003fe6                xQueueCreate
+                0x0000454a                vQueueDelete
+                0x0000410e                xQueueGenericSend
+                0x00004470                xQueueReceiveFromISR
+                0x0000480a                xQueueIsQueueFullFromISR
+                0x000044ee                uxQueueMessagesWaiting
+                0x000042ea                xQueueGenericReceive
+                0x00004524                uxQueueMessagesWaitingFromISR
+                0x00004782                xQueueIsQueueEmptyFromISR
+ .text          0x00004846      0x1e0 build/mcu/heap_2_f2xx.o
+                0x000049aa                vPortFree
+                0x00004848                pvPortMalloc
+ .text          0x00004a26      0x1ea build/mcu/port_f2xx.o
+                0x00004bbc                prvTickISR
+                0x00004afa                xPortStartScheduler
+                0x00004b30                vPortEndScheduler
+                0x00004b3a                vPortYield
+                0x00004bbc                vector_fff2
+                0x00004a26                pxPortInitialiseStack
+ .text          0x00004c10      0xb16 build/mcu/main_f2xx.o
+                0x00005506                LCD_info
+                0x00004c40                FBInsert
+                0x000054e8                decode_user_cmd
+                0x000051e6                FBDBCheckPosition
+                0x00004c10                LCDParts
+                0x000054de                print_user_help
+                0x00004fe8                FBDBShift
+                0x00004d50                switchArms
+                0x0000563c                main
+                0x000050dc                FBEmpty
+                0x0000554e                fpga_initialized
+                0x00004cd6                DBInsert
+ .text          0x00005726      0x40e ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(fitkitlib_f2xx.o)
+                0x00005752                clock_system_init
+                0x00005726                delay_cycle
+                0x0000579c                smclk_stop
+                0x00005820                fpga_configure_from_flash
+                0x00005a14                initialize_hardware_
+                0x00005b24                initialize_hardware
+                0x0000591e                fpga_configure_from_mcu
+ .text          0x00005b34     0x1448 ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(flash_f2xx.o)
+                0x00006c0a                FLASH_Dump_Page
+                0x00006af6                FLASH_EraseAll
+                0x0000648a                FLASH_ReadDataBuffer
+                0x00006a4a                FLASH_ErasePage
+                0x00005f2e                FLASH_print_status
+                0x00006bae                FLASH_Dump_Block
+                0x00006cba                FLASH_Dump_Adr
+                0x00005c2c                flash_init
+                0x00006aa0                FLASH_EraseBlock
+                0x00006678                FLASH_ReadDataA
+                0x000063fa                FLASH_WriteDataBuffer
+                0x00005d28                FLASH_availablepages
+                0x0000660e                FLASH_isPageBlank
+                0x00005e08                FLASH_IsReady
+                0x00005d96                FLASH_blocks
+                0x00005b34                FLASH_PageToAddr
+                0x0000632e                FLASH_WriteToBuffer
+                0x0000697c                FLASH_WriteByte
+                0x000065a0                FLASH_ReadData_Finalize
+                0x00006772                FLASH_ReadMemoryBuffer
+                0x00005db0                FLASH_size
+                0x00006b5e                FLASH_Dump_All
+                0x00005b66                flash_init_
+                0x000066fc                FLASH_WriteBufferMemory
+                0x00006526                FLASH_ReadData_Initialize
+                0x000065ae                FLASH_ReadData
+                0x00006a20                FLASH_EraseByte
+                0x00005dd6                FLASH_ReadStatus
+                0x000067f6                FLASH_ProgFPGA
+ .text          0x00006f7c      0x418 ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(flash_fpga_f2xx.o)
+                0x00006f7c                delay_cycle_
+                0x00007128                FPGAConfig_finalize
+                0x0000717a                FPGAConfig_detect_fpga
+                0x00007042                FPGAConfig_initialize
+                0x00006fa8                FPGAConfig_init
+ .text          0x00007394      0x290 ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(fpga_f2xx.o)
+                0x000073ca                FPGA_SPI_RW_A8_D8
+                0x0000741a                FPGA_SPI_RW_A8_D16
+                0x0000752e                FPGA_SPI_RW_AN_DN
+                0x00007490                FPGA_SPI_RW_A8_DN
+                0x00007394                FPGA_init
+                0x000073a6                FPGA_reset
+ .text          0x00007624      0x706 ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(globfun_f2xx.o)
+                0x00007624                chr2bin
+                0x00007736                chr2digit
+                0x000076de                chr2hex
+                0x00007ad8                strrev
+                0x00007868                str2long
+                0x00007938                str2long_2x
+                0x000077b2                hex2chr
+                0x00007692                digit2chr
+                0x00007b44                strupper
+                0x00007bda                long2str
+                0x00007806                rchr
+ .text          0x00007d2a       0xb8 ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(spi_f2xx.o)
+                0x00007d6c                SPI_Close
+                0x00007d86                SPI_read_wait_write
+                0x00007db6                SPI_write_wait_read
+                0x00007d2a                SPI_Init
+ .text          0x00007de2      0x926 ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(terminal_f2xx.o)
+                0x00007e06                terminal_init
+                0x00008112                terminal_idle_cb
+                0x000086f8                terminal_idle
+ .text          0x00008708       0xdc ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(timer_b_f2xx.o)
+                0x00008708                timerb_init
+                0x0000871e                delay_ms
+ .text          0x000087e4      0x3b0 ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(uart_f2xx.o)
+                0x0000891a                term_send_str
+                0x00008b1e                TxintrRS232
+                0x00008958                term_send_num
+                0x0000899a                term_send_hex
+                0x00008b5c                RxintrRS232
+                0x00008b1e                vector_ffec
+                0x00008a1e                term_rcv_block
+                0x000088bc                term_send_char_idle
+                0x00008848                serial_close
+                0x00008b5c                vector_ffee
+                0x00008abc                term_rcv_char_t
+                0x000087e4                serial_init
+                0x000088e2                term_send_char_hex
+                0x000089dc                term_rcv_char
+                0x00008878                term_send_char
+ .text          0x00008b94      0x83e ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(filetransfer_f2xx.o)
+                0x00008c52                send_header
+                0x0000913c                SPI_WriteFile
+                0x00009084                sendPageSPI
+                0x00009300                ReceiveFile
+                0x00008dba                writePageToFlash
+                0x000091d6                FLASH_WriteFile
+                0x00008b94                serial_rx_timeout
+                0x00009232                cbPage
+                0x00008f56                transmittFile
+                0x00008bee                serial_tx_buf
+ .text          0x000093d2      0x7f2 ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(cmd_f2xx.o)
+                0x000094ac                term_cmd_decode
+                0x000093e0                term_cmd_read
+                0x000093d2                term_cmd_clear
+ .text          0x00009bc4        0x0 c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\libgcc.a(__stop_progExec__.o)
+ .text          0x00009bc4        0x0 c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\libgcc.a(_mulsi3hw.o)
+ .text          0x00009bc4        0x0 c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\libgcc.a(_udivmodsi4.o)
+ .text          0x00009bc4        0x0 c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\libgcc.a(_divmodsi4.o)
+ .text          0x00009bc4        0x0 c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\libgcc.a(_reset_vector__.o)
+ .text          0x00009bc4        0x0 c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\libgcc.a(__low_level_init.o)
+ .text          0x00009bc4        0x0 c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\libgcc.a(_copy_data.o)
+ .text          0x00009bc4        0x0 c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\libgcc.a(_clear_bss.o)
+ .text          0x00009bc4        0x0 c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\libgcc.a(__jump_to_main.o)
+ .text          0x00009bc4       0x32 c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\..\..\..\..\msp430\lib\libc.a(strncpy.o)
+                0x00009bc4                strncpy
+ .text          0x00009bf6       0x12 c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\..\..\..\..\msp430\lib\libc.a(isdigit.o)
+                0x00009bf6                isdigit
+ .text          0x00009c08       0xd4 c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\..\..\..\..\msp430\lib\libc.a(memcpy.o)
+                0x00009c08                memcpy
+ .text          0x00009cdc       0x70 c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\..\..\..\..\msp430\lib\libc.a(memset.o)
+                0x00009cdc                memset
+ .text          0x00009d4c       0x14 c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\..\..\..\..\msp430\lib\libc.a(strlen.o)
+                0x00009d4c                strlen
+                0x00009d60                . = ALIGN (0x2)
+ *(.text.*)
+ .text.libgcc   0x00009d60        0x0 c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\libgcc.a(__stop_progExec__.o)
+ .text.libgcc   0x00009d60       0x28 c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\libgcc.a(_mulsi3hw.o)
+                0x00009d60                __umulsi3hw
+ .text.libgcc   0x00009d88       0x2a c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\libgcc.a(_udivmodsi4.o)
+                0x00009d88                __udivmodsi4
+ .text.libgcc   0x00009db2       0x4a c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\libgcc.a(_divmodsi4.o)
+                0x00009db2                __divmodsi4
+ .text.libgcc   0x00009dfc        0x0 c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\libgcc.a(_reset_vector__.o)
+ .text.libgcc   0x00009dfc        0x0 c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\libgcc.a(__low_level_init.o)
+ .text.libgcc   0x00009dfc        0x0 c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\libgcc.a(_copy_data.o)
+ .text.libgcc   0x00009dfc        0x0 c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\libgcc.a(_clear_bss.o)
+ .text.libgcc   0x00009dfc        0x0 c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\libgcc.a(__jump_to_main.o)
+                0x00009dfc                . = ALIGN (0x2)
+ *(.fini9)
+ .fini9         0x00009dfc        0x0 c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\libgcc.a(__stop_progExec__.o)
+                0x00009dfc                __stop_progExec__
+ *(.fini9)
+ *(.fini8)
+ *(.fini8)
+ *(.fini7)
+ *(.fini7)
+ *(.fini6)
+ *(.fini6)
+ *(.fini5)
+ *(.fini5)
+ *(.fini4)
+ *(.fini4)
+ *(.fini3)
+ *(.fini3)
+ *(.fini2)
+ *(.fini2)
+ *(.fini1)
+ *(.fini1)
+ *(.fini0)
+ .fini0         0x00009dfc        0x2 c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\libgcc.a(__stop_progExec__.o)
+ *(.fini0)
+ *(.fini)
+ *(.fini)
+                0x00009dfe                _etext = .
+
+.data           0x00001100       0x84 load address 0x00009dfe
+                0x00001100                PROVIDE (__data_start, .)
+                0x00001100                . = ALIGN (0x2)
+ *(.data)
+ .data          0x00001100        0x0 c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\..\..\..\..\msp430\lib\crt430x2617.o
+ .data          0x00001100        0x0 build/mcu/keyboard_f2xx.o
+ .data          0x00001100        0x0 build/mcu/display_f2xx.o
+ .data          0x00001100       0x14 build/mcu/tasks_f2xx.o
+                0x00001100                pxCurrentTCB
+ .data          0x00001114        0x0 build/mcu/list_f2xx.o
+ .data          0x00001114        0x0 build/mcu/queue_f2xx.o
+ .data          0x00001114        0x2 build/mcu/heap_2_f2xx.o
+ .data          0x00001116        0x2 build/mcu/port_f2xx.o
+                0x00001116                usCriticalNesting
+ .data          0x00001118       0x66 build/mcu/main_f2xx.o
+                0x00001124                RIGHT
+                0x00001132                notGetA
+                0x00001126                STEPS
+                0x0000114a                charmap1
+                0x00001152                charmap2
+                0x0000111a                cnt
+                0x0000116a                charmap5
+                0x0000112a                PUTA
+                0x00001128                GETA
+                0x00001172                charmap6
+                0x0000115a                charmap3
+                0x00001122                LEFT
+                0x0000112e                PUTB
+                0x00001118                pressed
+                0x00001130                noActionCnt
+                0x00001120                POS
+                0x00001140                DB
+                0x0000112c                GETB
+                0x00001134                armReadyB
+                0x00001162                charmap4
+                0x0000117a                robotState
+                0x00001136                FB
+                0x0000111e                IN
+                0x0000117c                pressState
+ .data          0x0000117e        0x4 ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(fitkitlib_f2xx.o)
+                0x0000117e                FPGA_config_length
+ .data          0x00001182        0x2 ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(flash_f2xx.o)
+                0x00001182                CNT_PAGES
+ .data          0x00001184        0x0 ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(flash_fpga_f2xx.o)
+ .data          0x00001184        0x0 ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(fpga_f2xx.o)
+ .data          0x00001184        0x0 ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(globfun_f2xx.o)
+ .data          0x00001184        0x0 ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(spi_f2xx.o)
+ .data          0x00001184        0x0 ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(terminal_f2xx.o)
+ .data          0x00001184        0x0 ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(timer_b_f2xx.o)
+ .data          0x00001184        0x0 ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(uart_f2xx.o)
+ .data          0x00001184        0x0 ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(filetransfer_f2xx.o)
+ .data          0x00001184        0x0 ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(cmd_f2xx.o)
+ .data          0x00001184        0x0 c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\libgcc.a(__stop_progExec__.o)
+ .data          0x00001184        0x0 c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\libgcc.a(_mulsi3hw.o)
+ .data          0x00001184        0x0 c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\libgcc.a(_udivmodsi4.o)
+ .data          0x00001184        0x0 c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\libgcc.a(_divmodsi4.o)
+ .data          0x00001184        0x0 c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\libgcc.a(_reset_vector__.o)
+ .data          0x00001184        0x0 c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\libgcc.a(__low_level_init.o)
+ .data          0x00001184        0x0 c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\libgcc.a(_copy_data.o)
+ .data          0x00001184        0x0 c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\libgcc.a(_clear_bss.o)
+ .data          0x00001184        0x0 c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\libgcc.a(__jump_to_main.o)
+ .data          0x00001184        0x0 c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\..\..\..\..\msp430\lib\libc.a(strncpy.o)
+ .data          0x00001184        0x0 c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\..\..\..\..\msp430\lib\libc.a(isdigit.o)
+ .data          0x00001184        0x0 c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\..\..\..\..\msp430\lib\libc.a(memcpy.o)
+ .data          0x00001184        0x0 c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\..\..\..\..\msp430\lib\libc.a(memset.o)
+ .data          0x00001184        0x0 c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\..\..\..\..\msp430\lib\libc.a(strlen.o)
+ *(SORT(.data.*))
+                0x00001184                . = ALIGN (0x2)
+ *(.gnu.linkonce.d*)
+                0x00001184                . = ALIGN (0x2)
+                0x00001184                _edata = .
+                0x00009dfe                PROVIDE (__data_load_start, LOADADDR (.data))
+                0x00000084                PROVIDE (__data_size, SIZEOF (.data))
+
+.bootloader     0x00000c00        0x0
+                0x00000c00                PROVIDE (__boot_start, .)
+ *(.bootloader)
+                0x00000c00                . = ALIGN (0x2)
+ *(.bootloader.*)
+
+.infomem        0x00001000        0x0
+ *(.infomem)
+                0x00001000                . = ALIGN (0x2)
+ *(.infomem.*)
+
+.infomemnobits  0x00001000        0x0
+ *(.infomemnobits)
+                0x00001000                . = ALIGN (0x2)
+ *(.infomemnobits.*)
+
+.bss            0x00001184      0x590
+                0x00001184                PROVIDE (__bss_start, .)
+ *(.bss)
+ .bss           0x00001184        0x0 c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\..\..\..\..\msp430\lib\crt430x2617.o
+ .bss           0x00001184        0x0 build/mcu/keyboard_f2xx.o
+ .bss           0x00001184        0x0 build/mcu/display_f2xx.o
+ .bss           0x00001184       0x4a build/mcu/tasks_f2xx.o
+ .bss           0x000011ce        0x0 build/mcu/list_f2xx.o
+ .bss           0x000011ce        0x0 build/mcu/queue_f2xx.o
+ .bss           0x000011ce      0x40c build/mcu/heap_2_f2xx.o
+ .bss           0x000015da        0x0 build/mcu/port_f2xx.o
+ .bss           0x000015da        0x0 build/mcu/main_f2xx.o
+ .bss           0x000015da        0x0 ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(fitkitlib_f2xx.o)
+ .bss           0x000015da        0x0 ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(flash_f2xx.o)
+ .bss           0x000015da        0x0 ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(flash_fpga_f2xx.o)
+ .bss           0x000015da        0x0 ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(fpga_f2xx.o)
+ .bss           0x000015da        0x0 ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(globfun_f2xx.o)
+ .bss           0x000015da        0x0 ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(spi_f2xx.o)
+ .bss           0x000015da        0x0 ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(terminal_f2xx.o)
+ .bss           0x000015da        0x0 ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(timer_b_f2xx.o)
+ .bss           0x000015da        0x0 ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(uart_f2xx.o)
+ .bss           0x000015da        0x0 ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(filetransfer_f2xx.o)
+ .bss           0x000015da        0x0 ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(cmd_f2xx.o)
+ .bss           0x000015da        0x0 c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\libgcc.a(__stop_progExec__.o)
+ .bss           0x000015da        0x0 c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\libgcc.a(_mulsi3hw.o)
+ .bss           0x000015da        0x0 c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\libgcc.a(_udivmodsi4.o)
+ .bss           0x000015da        0x0 c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\libgcc.a(_divmodsi4.o)
+ .bss           0x000015da        0x0 c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\libgcc.a(_reset_vector__.o)
+ .bss           0x000015da        0x0 c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\libgcc.a(__low_level_init.o)
+ .bss           0x000015da        0x0 c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\libgcc.a(_copy_data.o)
+ .bss           0x000015da        0x0 c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\libgcc.a(_clear_bss.o)
+ .bss           0x000015da        0x0 c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\libgcc.a(__jump_to_main.o)
+ .bss           0x000015da        0x0 c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\..\..\..\..\msp430\lib\libc.a(strncpy.o)
+ .bss           0x000015da        0x0 c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\..\..\..\..\msp430\lib\libc.a(isdigit.o)
+ .bss           0x000015da        0x0 c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\..\..\..\..\msp430\lib\libc.a(memcpy.o)
+ .bss           0x000015da        0x0 c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\..\..\..\..\msp430\lib\libc.a(memset.o)
+ .bss           0x000015da        0x0 c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\..\..\..\..\msp430\lib\libc.a(strlen.o)
+ *(SORT(.bss.*))
+ *(COMMON)
+ COMMON         0x000015da       0x18 build/mcu/keyboard_f2xx.o
+                0x000015da                index_buf
+                0x000015dc                keyboard_buffer
+                0x000015f0                write_index_buf
+                0x000015f1                chars_in_buf
+ COMMON         0x000015f2        0x4 build/mcu/display_f2xx.o
+                0x000015f2                lcd_shift_addr
+                0x000015f4                lcd_cursor_addr
+ COMMON         0x000015f6        0x1 build/mcu/main_f2xx.o
+                0x000015f6                last_ch
+ *fill*         0x000015f7        0x1 00
+ COMMON         0x000015f8        0x6 ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(flash_f2xx.o)
+                0x000015f8                CountPage
+                0x000015fa                TypeBufferFlash
+                0x000015fc                AdrBufferFlash
+ COMMON         0x000015fe        0x2 ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(terminal_f2xx.o)
+                0x000015fe                Cmd_Old
+                0x000015ff                Cmd
+ COMMON         0x00001600       0xf1 ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(uart_f2xx.o)
+                0x00001600                BreakFlag
+                0x00001601                TransmitNum
+                0x00001602                ReceiveNum
+                0x00001604                ReceiveBuf
+                0x00001684                ReceiveIndexRec
+                0x00001686                TransmitBuf
+                0x000016ea                ErrorFlag
+                0x000016ec                ReceiveIndex
+                0x000016ee                TransmitIndexSend
+                0x000016ef                TransmitIndex
+                0x000016f0                PomRS232
+ *fill*         0x000016f1        0x1 00
+ COMMON         0x000016f2        0x4 ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(filetransfer_f2xx.o)
+                0x000016f2                cb_fun
+                0x000016f4                cb_buf
+ COMMON         0x000016f6       0x1e ../../..//mcu/libfitkit/build\libfitkit_f2xx.a(cmd_f2xx.o)
+                0x000016f6                CMD_Long
+                0x000016fa                CMDStr
+                0x00001713                CMDStrLen
+                0x00001714                PROVIDE (__bss_end, .)
+                0x00001714                _end = .
+                0x00000590                PROVIDE (__bss_size, SIZEOF (.bss))
+
+.noinit         0x00001714        0x0
+                0x00001714                PROVIDE (__noinit_start, .)
+ *(.noinit)
+ *(.noinit.*)
+ *(COMMON)
+                0x00001714                PROVIDE (__noinit_end, .)
+                0x00001714                _end = .
+
+.vectors        0x0000ffc0       0x40
+                0x0000ffc0                PROVIDE (__vectors_start, .)
+ *(.vectors*)
+ .vectors       0x0000ffc0       0x40 c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\..\..\..\..\msp430\lib\crt430x2617.o
+                0x0000ffc0                InterruptVectors
+ *(.vectors*)
+                0x00010000                _vectors_end = .
+
+.profiler
+ *(.profiler)
+
+.stab           0x00000000      0xfd8
+ *(.stab)
+ .stab          0x00000000      0x1b0 c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\..\..\..\..\msp430\lib\crt430x2617.o
+ .stab          0x000001b0      0x474 c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\..\..\..\..\msp430\lib\libc.a(strncpy.o)
+                                0x480 (size before relaxing)
+ .stab          0x00000624      0x168 c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\..\..\..\..\msp430\lib\libc.a(isdigit.o)
+                                0x174 (size before relaxing)
+ .stab          0x0000078c      0x360 c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\..\..\..\..\msp430\lib\libc.a(memcpy.o)
+                                0x5ac (size before relaxing)
+ .stab          0x00000aec      0x30c c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\..\..\..\..\msp430\lib\libc.a(memset.o)
+                                0x558 (size before relaxing)
+ .stab          0x00000df8      0x1e0 c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\..\..\..\..\msp430\lib\libc.a(strlen.o)
+                                0x42c (size before relaxing)
+
+.stabstr        0x00000000      0xa41
+ *(.stabstr)
+ .stabstr       0x00000000      0xa41 c:\mspgcc\bin\..\lib\gcc-lib\msp430\3.2.3\..\..\..\..\msp430\lib\crt430x2617.o
+
+.stab.excl
+ *(.stab.excl)
+
+.stab.exclstr
+ *(.stab.exclstr)
+
+.stab.index
+ *(.stab.index)
+
+.stab.indexstr
+ *(.stab.indexstr)
+
+.comment
+ *(.comment)
+
+.debug
+ *(.debug)
+
+.line
+ *(.line)
+
+.debug_srcinfo
+ *(.debug_srcinfo)
+
+.debug_sfnames
+ *(.debug_sfnames)
+
+.debug_aranges
+ *(.debug_aranges)
+
+.debug_pubnames
+ *(.debug_pubnames)
+
+.debug_info
+ *(.debug_info)
+ *(.gnu.linkonce.wi.*)
+
+.debug_abbrev
+ *(.debug_abbrev)
+
+.debug_line
+ *(.debug_line)
+
+.debug_frame
+ *(.debug_frame)
+
+.debug_str
+ *(.debug_str)
+
+.debug_loc
+ *(.debug_loc)
+
+.debug_macinfo
+ *(.debug_macinfo)
+                0x00003100                PROVIDE (__stack, 0x3100)
+                0x00009dfe                PROVIDE (__data_start_rom, _etext)
+                0x00009e82                PROVIDE (__data_end_rom, (_etext + SIZEOF (.data)))
+                0x00009e82                PROVIDE (__noinit_start_rom, (_etext + SIZEOF (.data)))
+                0x00009e82                PROVIDE (__noinit_end_rom, ((_etext + SIZEOF (.data)) + SIZEOF (.noinit)))
+                0x00000000                PROVIDE (__subdevice_has_heap, 0x0)
+OUTPUT(build/robot_f2xx.elf elf32-msp430)
