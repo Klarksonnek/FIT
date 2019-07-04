@@ -1,0 +1,43 @@
+% Ctvrty projekt pro predmet ITY
+% Autor: Klara Necasova
+% Datum: 17.4.2015
+\documentclass[a4paper, 11pt]{article}
+\usepackage[left=2cm,text={17cm, 24cm},top=3cm]{geometry}
+\usepackage[czech]{babel}
+\usepackage[cp1250]{inputenc}
+\usepackage{times}
+\pagestyle{plain}             
+\usepackage{url}          
+\newcommand{\myuv}[1]{\quotedblbase #1\textquotedblleft}
+\bibliographystyle{czplain}
+
+\begin{document}
+
+% Titulni stranka
+\begin{titlepage}
+\begin{center}
+\textsc{\Huge{Vysoké uèení technické v~Brnì}\medskip\\
+\huge{Fakulta informaèních technologií}}\\
+\vspace{\stretch{0.382}}
+\LARGE{Typografie a~publikování\,--\,4. projekt}\smallskip\\
+\Huge{Bibliografické citace}\\
+\vspace{\stretch{0.618}}
+\end{center}
+{\Large{\today} \hfill \Large{Klára Neèasová}}
+\end{titlepage}
+
+% Text 
+\section*{Vývoj typografie}
+Lidé se už od dávných dob snažili zaznamenávat svoje myšlenky. Pøed vznikem písma jim k~tomu sloužily jeskynní malby, záøezy do døeva, rytiny do kamenù nebo rùzné šipky a~uzlíky. K~dnešní podobì písma vedla dlouhá cesta
+trvající více než 5\,000 let \cite{Zdrahalova:Secesni}. Hieroglyfické písmo bylo známo v~mayské kultuøe již kolem roku 2000 pø.\,n.\,l. \cite{Rypar:Mayove}. Klínové písmo se poprvé objevilo v~Mezopotámii kolem roku 3300 pø.\,n.\,l. \cite{Chisholmova:Dejiny}. 
+
+Písmo lze definovat jako sadu znakù, písmen, èíslic, symbolù, interpunkcí, které mají shodný unikátní design \cite{Pilarova:Pismo}. Barevné písmo využívají firmy a~instituce pøedevším jako reklamní prostøedek. Vnímání barvy písma je individuální záležitostí, existují však i~jistá obecná pravidla \cite{Sedlacek:Marketing}. Hlavním cílem typografie je dosažení toho, aby byl text dobøe èitelný a~srozumitelný. K~tomu slouží ètyøi elementární prvky sazby: písmo, slovo, øádek a~sloupec, dùležitá je však také kompozice nebo kontrast. Písmo je chápáno jako samostatná kategorie a~úkolem typografa je volba takového typu písma, které by nejvíce vyhovovalo úèelu \cite{Slavicek:Typografie}. Publikování se hodnì rozšíøilo díky rozmachu moderních technologií, což umožnilo zveøejòovat texty i~lidem, kteøí nemají odpovídající typografické vzdìlání. Mnoho lidí je pøesvìdèeno, že na jejich klávesnici se dají najít uvozovky. Pravda je však taková, že se zde nachází znak pro palcovou míru, nikoli èeské uvozovky \cite{Sedlmajer:Typografie}. Došlo ke snížení kvality velké èásti tisku a~témìø se vytratilo potìšení z listování dokonalou knihou \cite{Ziegler:Prace}. 
+
+Je nutností, aby autoøi textù rozmanitého charakteru byli obeznámeni s~pravidly a~postupy, jakým zpùsobem mají své texty vytváøet. Na internetovém portálu Antypa.cz jsou dostupné všechny potøebné informace týkající se této problematiky \cite{Friedlova:Antypa}. Pro správnou sazbu lze využít nìkolika užiteèných systémù a~programù. Mezi první nástroje patøí {\TeX } z~roku 1977, jehož tvùrcem je Donald Ervin Kruth. O~jeho rozšíøení se postaral v~roce 1985 Leslie Lamport, tvùrce sázecího systému \LaTeX\,\cite{Kopka:Guide}.
+
+\newpage
+
+\renewcommand{\refname}{Literatura}
+\bibliography{proj4_literatura}
+
+\end{document}
