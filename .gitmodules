@@ -4,3 +4,6 @@
 [submodule "PIS/vut_fit_MIT_PIS"]
 	path = PIS/vut_fit_MIT_PIS
 	url = https://github.com/mienkofax/vut_fit_MIT_PIS
+[submodule "BIO/vut_fit_MIT_BIO"]
+	path = BIO/vut_fit_MIT_BIO
+	url = https://github.com/mienkofax/vut_fit_MIT_BIO
